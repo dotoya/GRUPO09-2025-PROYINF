@@ -10,13 +10,11 @@ Este es el repositorio del *Grupo 09*, cuyos integrantes son:
 
 ## Wiki
 
-Puede acceder a la Wiki mediante el siguiente [enlace](https://github.com/dotoya/GRUPO09-2025-PROYINF.wiki.git)
+Puede acceder a la Wiki mediante el siguiente [enlace]([https://github.com/dotoya/GRUPO09-2025-PROYINF.wiki.git](https://github.com/dotoya/GRUPO09-2025-PROYINF.wiki.git))
 
 ## Videos
 
 * [Video presentación cliente](https://aula.usm.cl/pluginfile.php/7621199/mod_resource/content/2/video1352931478.mp4)
-* [Video presentación avance 1](https://www.youtube.com/)
 
 ## Aspectos técnicos relevantes
 
-_Todo aspecto relevante cuando para poder usar el proyecto o consideraciones del proyecto base a ser entregado_
