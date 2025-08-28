@@ -10,7 +10,7 @@ Este es el repositorio del *Grupo 09*, cuyos integrantes son:
 
 ## Wiki
 
-Puede acceder a la Wiki mediante el siguiente [enlace]([https://github.com/dotoya/GRUPO09-2025-PROYINF.wiki.git](https://github.com/dotoya/GRUPO09-2025-PROYINF.wiki.git))
+Puede acceder a la Wiki mediante el siguiente [enlace](https://github.com/dotoya/GRUPO09-2025-PROYINF.wiki.git)
 
 ## Videos
 
