@@ -1,6 +1,6 @@
 # Grupo 09
 
-Este es el repositorio del *Grupo X*, cuyos integrantes son:
+Este es el repositorio del *Grupo 09*, cuyos integrantes son:
 
 * Nicolas Ignacio Vargas Ezquerra - 202373123-4
 * Daniel Andres San Martin Diaz - 202373106-4
@@ -12,7 +12,7 @@ Este es el repositorio del *Grupo X*, cuyos integrantes son:
 
 > Obtener enlace desde el home de la wiki del repo.
 
-Puede acceder a la Wiki mediante el siguiente [enlace]((https://github.com/dotoya/GRUPO09-2025-PROYINF.wiki.git)
+Puede acceder a la Wiki mediante el siguiente [enlace](https://github.com/dotoya/GRUPO09-2025-PROYINF.wiki.git)
 
 ## Videos
 
