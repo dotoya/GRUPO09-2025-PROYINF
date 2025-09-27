@@ -12,9 +12,7 @@ services:
       - DB_NAME=mydb
     depends_on:
       - postgres_db
-    volumes:
-      - ./:/app
-      - /app/node_modules
+    # No montar el directorio de la app para que la imagen construida incluya el frontend compilado
 
   postgres_db:
     image: postgres:15-alpine

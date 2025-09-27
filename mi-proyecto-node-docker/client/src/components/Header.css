@@ -1,0 +1,6 @@
+.site-header{display:flex;justify-content:space-between;align-items:center;padding:12px 28px;background:transparent}
+.site-header .logo{display:flex;align-items:center}
+.logo-mark{width:40px;height:40px;border-radius:8px;background:linear-gradient(135deg,#0f62fe,#1f6feb);display:flex;align-items:center;justify-content:center;color:#fff;font-weight:700;margin-right:10px}
+.logo-text{font-weight:700;color:#0f172a}
+.site-header nav a{margin-left:16px;color:#0f172a;text-decoration:none;font-weight:600}
+
