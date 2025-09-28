@@ -38,17 +38,40 @@ export default function Register(){
   const [rut, setRut] = useState('')
   const [rutError, setRutError] = useState('')
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault()
-    // validar RUT antes de enviar
     if(!validateRut(rut)){
       setRutError('RUT inválido. Verifica el número y el dígito verificador (ej: 12.345.678-5)')
       return
     }
     setRutError('')
     const cleanedRut = cleanRut(rut)
-    console.log('register', {name, email, password, rut: cleanedRut})
-    alert('Registro demo enviado')
+    const payload = {
+      nombre_completo: name,
+      gmail: email,
+      contraseña: password,
+      rut: cleanedRut
+    }
+    try {
+      const res = await fetch('/api/register', {
+        method: 'POST',
+        headers: {'Content-Type': 'application/json'},
+        body: JSON.stringify(payload)
+      })
+      if (res.ok) {
+        alert('Registro exitoso')
+        // Opcional: limpiar campos
+        setName('')
+        setEmail('')
+        setPassword('')
+        setRut('')
+      } else {
+        const data = await res.json()
+        alert('Error: ' + (data.error || 'No se pudo registrar'))
+      }
+    } catch (err) {
+      alert('Error de conexión con el servidor')
+    }
   }
 
   const handleRutChange = (e) => {

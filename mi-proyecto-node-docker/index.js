@@ -7,6 +7,28 @@ const port = process.env.PORT || 3000;
 // Servir archivos estáticos desde /public
 app.use(express.static(path.join(__dirname, 'public')));
 
+// Middleware para parsear JSON en las peticiones POST
+app.use(express.json());
+
+// Ruta para registrar un nuevo cliente
+app.post('/api/register', async (req, res) => {
+  const { rut, gmail, contraseña, nombre_completo } = req.body;
+  if (!rut || !gmail || !contraseña || !nombre_completo) {
+    return res.status(400).json({ error: 'Faltan campos requeridos' });
+  }
+  try {
+    await pool.query(
+      `INSERT INTO clientes (rut, gmail, contraseña, nombre_completo, administrador, fecha_de_nacimiento)
+      VALUES ($1, $2, $3, $4, false, NULL)`,
+      [rut, gmail, contraseña, nombre_completo]
+    );
+    res.json({ success: true });
+  } catch (err) {
+    console.error('Error al registrar cliente:', err);
+    res.status(500).json({ error: 'No se pudo registrar el cliente' });
+  }
+});
+
 // Ruta de prueba que guarda un mensaje en la base de datos
 app.get('/save', async (req, res) => {
   try {
