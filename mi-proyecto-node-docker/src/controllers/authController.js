@@ -4,9 +4,9 @@ const userService = require('../services/userService');
 
 // Registrar un nuevo usuario
 const registerUser = async (req, res) => {
-    const { name, email, password } = req.body;
+    const { name, email, password, rut } = req.body;
 
-    if (!name || !email || !password) {
+    if (!name || !email || !password || !rut) {
         return res.status(400).json({ message: 'Todos los campos son obligatorios' });
     }
 
