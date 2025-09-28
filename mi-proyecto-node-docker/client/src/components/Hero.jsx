@@ -5,7 +5,7 @@ export default function Hero(){
   return (
     <section className="hero">
       <div className="hero-inner">
-        <h1>Bienvenido al Banco</h1>
+        <h1>Bienvenido al Polar</h1>
         <p>Donde somos tu mayor apoyo.</p>
         <a className="cta" href="#products">Conoce más</a>
         <div style={{marginTop:24}} aria-hidden>

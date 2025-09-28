@@ -52,8 +52,10 @@ export default function Register(){
   }
 
   const handleRutChange = (e) => {
-    const v = e.target.value
-    setRut(v)
+    // Forzar que el usuario ingrese sin puntos: eliminamos puntos y espacios en tiempo real
+    const raw = e.target.value
+    const cleanedInput = raw.replace(/\./g, '').replace(/\s/g, '').toUpperCase()
+    setRut(cleanedInput)
     if(rutError) setRutError('')
   }
 
@@ -62,11 +64,11 @@ export default function Register(){
       <form className="login-card" onSubmit={handleSubmit}>
         <h2>Registro</h2>
         <label>
-          Nombre
+          Nombre y apellido
           <input value={name} onChange={e=>setName(e.target.value)} required />
         </label>
         <label>
-          RUT
+          RUT (sin puntos)
           <input value={rut} onChange={handleRutChange} placeholder="12345678-9" required />
         </label>
         {rutError && <div className="field-error">{rutError}</div>}

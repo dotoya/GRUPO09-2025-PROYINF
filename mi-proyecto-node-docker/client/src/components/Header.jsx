@@ -23,7 +23,7 @@ export default function Header(){
             <text x="50%" y="50%" dominantBaseline="middle" textAnchor="middle" fontSize="16" fontWeight="700" fill="#fff">MA</text>
           </svg>
         </div>
-        <div className="logo-text">Mi App</div>
+        <div className="logo-text">Banco Polar</div>
       </div>
 
       <nav>

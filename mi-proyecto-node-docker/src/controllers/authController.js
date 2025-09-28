@@ -19,8 +19,8 @@ const registerUser = async (req, res) => {
 
         const hashedPassword = await bcrypt.hash(password, 10);
 
-        // Crear el usuario
-        const newUser = await userService.createUser({ name, email, password: hashedPassword });
+    // Crear el usuario (asegurar que enviamos rut y password hasheada)
+    const newUser = await userService.createUser({ name, email, password: hashedPassword, rut });
         res.status(201).json({ message: 'Usuario registrado con éxito', user: newUser });
     } catch (error) {
         res.status(500).json({ message: 'Error al registrar el usuario', error: error.message });
