@@ -30,6 +30,58 @@ app.get('/messages', async (req, res) => {
   }
 });
 
+// Ruta para inicializar las tablas en la base de datos
+app.get('/table-cliente', async (req, res) => {
+  try {
+    // Tabla clientes
+    await pool.query(`
+      CREATE TABLE IF NOT EXISTS clientes (
+        rut VARCHAR(10) PRIMARY KEY,
+        gmail VARCHAR(255),
+        contraseña VARCHAR(255),
+        nombre_completo VARCHAR(255),
+        administrador BOOLEAN,
+        fecha_de_nacimiento DATE
+      )
+    `);
+
+    // Tabla solicitudes
+    await pool.query(`
+      CREATE TABLE IF NOT EXISTS solicitudes (
+        id SERIAL PRIMARY KEY,
+        monto_total INT,
+        cuotas INT,
+        rut VARCHAR(10) REFERENCES clientes(rut),
+        costo_total_cred INT,
+        interes FLOAT,
+        CAE FLOAT,
+        valor_cuota_mes INT,
+        fecha_primer_pago DATE,
+        estado_sol INT
+      )
+    `);
+
+    // Tabla simulación
+    await pool.query(`
+      CREATE TABLE IF NOT EXISTS simulacion (
+        id SERIAL PRIMARY KEY,
+        monto_total INT,
+        cuotas INT,
+        rut VARCHAR(10) REFERENCES clientes(rut),
+        costo_total_cred INT,
+        interes FLOAT,
+        CAE FLOAT,
+        valor_cuota_mes INT
+      )
+    `);
+
+    res.send('Tablas creadas correctamente');
+  } catch (err) {
+    console.error(err);
+    res.status(500).send('Error');
+  }
+});
+
 // En caso de rutas desconocidas (SPA), devolver index.html para que el cliente maneje el enrutado
 const fs = require('fs');
 app.get('*', (req, res) => {
