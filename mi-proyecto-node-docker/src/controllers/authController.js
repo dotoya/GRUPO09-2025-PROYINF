@@ -1,4 +1,3 @@
-const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 const userService = require('../services/userService');
 
@@ -17,10 +16,8 @@ const registerUser = async (req, res) => {
             return res.status(400).json({ message: 'El usuario ya está registrado' });
         }
 
-        const hashedPassword = await bcrypt.hash(password, 10);
-
-    // Crear el usuario (asegurar que enviamos rut y password hasheada)
-    const newUser = await userService.createUser({ name, email, password: hashedPassword, rut });
+        // Crear el usuario (almacenar la contraseña sin hash temporalmente)
+        const newUser = await userService.createUser({ name, email, password, rut });
         res.status(201).json({ message: 'Usuario registrado con éxito', user: newUser });
     } catch (error) {
         res.status(500).json({ message: 'Error al registrar el usuario', error: error.message });
@@ -42,9 +39,8 @@ const loginUser = async (req, res) => {
             return res.status(404).json({ message: 'Usuario no encontrado' });
         }
 
-        // Verificar la contraseña
-        const isPasswordValid = await bcrypt.compare(password, user.password);
-        if (!isPasswordValid) {
+        // Comparar contraseñas directamente (sin hash temporalmente)
+        if (password !== user.password) {
             return res.status(401).json({ message: 'Contraseña incorrecta' });
         }
 
