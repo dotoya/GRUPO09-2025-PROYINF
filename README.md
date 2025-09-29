@@ -26,3 +26,4 @@ Puede acceder a la Wiki mediante el siguiente [enlace](https://github.com/dotoya
 ## Aspectos técnicos relevantes
 
 * no funciona el log in y tampoco funciona el registro si el rut termina en -k
+* El proyecto actual corresponde a una base inicial de lo que será el proyecto final. Las historias de usuario representan los objetivos a alcanzar, sin embargo, aún no se encuentran implementadas.
