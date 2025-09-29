@@ -19,7 +19,7 @@ Puede acceder a la Wiki mediante el siguiente [enlace](https://github.com/dotoya
 ## Indicaciones para levantar el proyecto
 
 * abrir la terminal en la dirección de la carpeta mi-proyecto-node-docker
-* en la terminal, ejecutar docker exec -it mi-proyecto-node-docker-postgres_db-1 psql -U user -d mydb
+* en la terminal, ejecutar: docker compose up --build
 * abrir el navegador web de preferencia e ir al siguiente url: http://localhost:3000
 * para crear la tabla clientes en la base de datos, para que queden los usuarios registrados se debe ingresar al siguiente url: http://localhost:3000/table-cliente
 
