@@ -1,6 +1,8 @@
 const express = require('express');
 const path = require('path');
-const pool = require('./db'); // Importar la conexión
+const pool = require('./db'); // Conexión a PostgreSQL
+const fs = require('fs');
+
 const app = express();
 const port = process.env.PORT || 3000;
 
@@ -10,50 +12,10 @@ app.use(express.static(path.join(__dirname, 'public')));
 // Middleware para parsear JSON en las peticiones POST
 app.use(express.json());
 
-// Ruta para registrar un nuevo cliente
-app.post('/api/register', async (req, res) => {
-  const { rut, gmail, contraseña, nombre_completo } = req.body;
-  if (!rut || !gmail || !contraseña || !nombre_completo) {
-    return res.status(400).json({ error: 'Faltan campos requeridos' });
-  }
-  try {
-    await pool.query(
-      `INSERT INTO clientes (rut, gmail, contraseña, nombre_completo, administrador, fecha_de_nacimiento)
-      VALUES ($1, $2, $3, $4, false, NULL)`,
-      [rut, gmail, contraseña, nombre_completo]
-    );
-    res.json({ success: true });
-  } catch (err) {
-    console.error('Error al registrar cliente:', err);
-    res.status(500).json({ error: 'No se pudo registrar el cliente' });
-  }
-});
-
-// Ruta de prueba que guarda un mensaje en la base de datos
-app.get('/save', async (req, res) => {
-  try {
-    await pool.query('CREATE TABLE IF NOT EXISTS messages (id SERIAL PRIMARY KEY, content TEXT)');
-    await pool.query('INSERT INTO messages (content) VALUES ($1)', ['Hola desde PostgreSQL!']);
-    res.send('Mensaje guardado en la base de datos');
-  } catch (err) {
-    console.error(err);
-    res.status(500).send('Error');
-  }
-});
-
-// Ruta para obtener todos los mensajes
-app.get('/messages', async (req, res) => {
-  try {
-    const result = await pool.query('SELECT * FROM messages');
-    res.json(result.rows);
-  } catch (err) {
-    console.error(err);
-    res.status(500).send('Error');
-  }
-});
-
-// Ruta para inicializar las tablas en la base de datos
-app.get('/table-cliente', async (req, res) => {
+/* ============================
+  FUNCIÓN PARA CREAR TABLAS
+   ============================ */
+async function createTables() {
   try {
     // Tabla clientes
     await pool.query(`
@@ -97,22 +59,66 @@ app.get('/table-cliente', async (req, res) => {
       )
     `);
 
-    res.send('Tablas creadas correctamente');
+    console.log('Tablas creadas o ya existentes');
+  } catch (err) {
+    console.error('Error al crear tablas:', err);
+    process.exit(1); // Detiene el servidor si no puede crear las tablas
+  }
+}
+
+
+
+// Registrar nuevo cliente
+app.post('/api/register', async (req, res) => {
+  const { rut, gmail, contraseña, nombre_completo } = req.body;
+  if (!rut || !gmail || !contraseña || !nombre_completo) {
+    return res.status(400).json({ error: 'Faltan campos requeridos' });
+  }
+  try {
+    await pool.query(
+      `INSERT INTO clientes (rut, gmail, contraseña, nombre_completo, administrador, fecha_de_nacimiento)
+      VALUES ($1, $2, $3, $4, false, NULL)`,
+      [rut, gmail, contraseña, nombre_completo]
+    );
+    res.json({ success: true });
+  } catch (err) {
+    console.error('Error al registrar cliente:', err);
+    res.status(500).json({ error: 'No se pudo registrar el cliente' });
+  }
+});
+
+// Guardar mensaje de prueba
+app.get('/save', async (req, res) => {
+  try {
+    await pool.query('CREATE TABLE IF NOT EXISTS messages (id SERIAL PRIMARY KEY, content TEXT)');
+    await pool.query('INSERT INTO messages (content) VALUES ($1)', ['Hola desde PostgreSQL!']);
+    res.send('Mensaje guardado en la base de datos');
   } catch (err) {
     console.error(err);
     res.status(500).send('Error');
   }
 });
 
-// En caso de rutas desconocidas (SPA), devolver index.html para que el cliente maneje el enrutado
-const fs = require('fs');
+// Obtener todos los mensajes
+app.get('/messages', async (req, res) => {
+  try {
+    const result = await pool.query('SELECT * FROM messages');
+    res.json(result.rows);
+  } catch (err) {
+    console.error(err);
+    res.status(500).send('Error');
+  }
+});
+
+/* ============================
+    FRONTEND (Rutas desconocidas)
+   ============================ */
 app.get('*', (req, res) => {
   const indexPath = path.join(__dirname, 'public', 'index.html');
   if (fs.existsSync(indexPath)) {
     return res.sendFile(indexPath);
   }
 
-  // Fallback ligero para cuando no existe el frontend compilado (útil en desarrollo sin build)
   res.type('html').send(`
     <!doctype html>
     <html>
@@ -126,6 +132,12 @@ app.get('*', (req, res) => {
   `);
 });
 
-app.listen(port, () => {
-  console.log(`App corriendo en http://localhost:${port}`);
-});
+/* ============================
+    INICIO DEL SERVIDOR
+   ============================ */
+(async () => {
+  await createTables(); // Crea las tablas automáticamente al iniciar
+  app.listen(port, () => {
+    console.log(`App corriendo en http://localhost:${port}`);
+  });
+})();
