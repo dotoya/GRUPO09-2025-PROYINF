@@ -41,7 +41,8 @@ async function createTables() {
         CAE FLOAT,
         valor_cuota_mes INT,
         fecha_primer_pago DATE,
-        estado_sol INT
+        estado_sol INT,
+        renta_liquida_mensual INT
       )
     `);
 
@@ -55,7 +56,8 @@ async function createTables() {
         costo_total_cred INT,
         interes FLOAT,
         CAE FLOAT,
-        valor_cuota_mes INT
+        valor_cuota_mes INT,
+        renta_liquida_mensual INT
       )
     `);
 
