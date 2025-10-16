@@ -61,7 +61,11 @@ async function createTables() {
       )
     `);
 
-    console.log('Tablas creadas o ya existentes');
+    // Asegurar columna en caso de que las tablas existieran sin esta columna
+    await pool.query(`ALTER TABLE solicitudes ADD COLUMN IF NOT EXISTS renta_liquida_mensual INT`);
+    await pool.query(`ALTER TABLE simulacion ADD COLUMN IF NOT EXISTS renta_liquida_mensual INT`);
+
+    console.log('Tablas creadas o ya existentes (columnas aseguradas)');
   } catch (err) {
     console.error('Error al crear tablas:', err);
     process.exit(1); // Detiene el servidor si no puede crear las tablas
