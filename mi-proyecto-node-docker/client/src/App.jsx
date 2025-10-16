@@ -6,6 +6,7 @@ import Footer from './components/Footer'
 import Login from './pages/Login'
 import Register from './pages/Register'
 import LoggedIn from './pages/LoggedIn'
+import Simulacion from './pages/Simulacion'
 import {useState, useEffect} from 'react'
 
 export default function App(){
@@ -38,6 +39,14 @@ export default function App(){
     return (
       <div>
         <LoggedIn />
+      </div>
+    )
+  }
+
+  if (path === '/simulacion') {
+    return (
+      <div>
+        <Simulacion />
       </div>
     )
   }

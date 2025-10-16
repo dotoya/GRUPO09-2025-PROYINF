@@ -29,6 +29,7 @@ export default function Header(){
       <nav>
         <a href="/" onClick={(e)=>navigate(e, '/')}>Inicio</a>
         <a href="/login" onClick={(e)=>navigate(e, '/login')}>Iniciar sesión</a>
+        <a href="/simulacion" onClick={(e)=>navigate(e, '/simulacion')}>Simulación</a>
         <a href="#prestamo">Prestamo</a>
         <a href="#contact">Contacto</a>
       </nav>
