@@ -1,8 +1,0 @@
-.sim-wrap{display:flex;align-items:center;justify-content:center;padding:40px}
-.sim-card{background:#fff;padding:20px;border-radius:12px;box-shadow:0 10px 30px rgba(10,20,40,0.06);max-width:520px;width:100%}
-.sim-card h2{margin:0 0 12px}
-.sim-card label{display:block;margin-bottom:10px;font-size:14px}
-.sim-card input{width:100%;padding:8px 10px;margin-top:6px;border-radius:8px;border:1px solid #e6eefc}
-.sim-card button{margin-top:12px;background:#0f172a;color:#fff;padding:10px 14px;border-radius:8px;border:0}
-.form-error{background:#ffe6e6;color:#800; padding:8px;border-radius:8px;margin-bottom:8px}
-.form-ok{background:#e6ffef;color:#064; padding:8px;border-radius:8px;margin-bottom:8px}
