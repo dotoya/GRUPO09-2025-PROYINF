@@ -40,3 +40,154 @@
 .read-the-docs {
   color: #888;
 }
+
+/* Estilos para la página principal del banco */
+.bank-home {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial;
+  color: #0b2a4a;
+  padding: 2rem 1rem;
+}
+
+.hero {
+  background: linear-gradient(180deg, #f5fbff 0%, #ffffff 60%);
+  padding: 3rem 1rem;
+  border-radius: 12px;
+  box-shadow: 0 6px 20px rgba(11,42,74,0.06);
+}
+.hero .logo {
+  height: 4.5rem;
+}
+.hero h1 {
+  margin: 0.5rem 0 0.25rem;
+  font-size: 2rem;
+}
+.hero p {
+  margin: 0 0 1rem;
+  color: #38608a;
+}
+.cta button {
+  margin: 0 0.5rem;
+  padding: 0.6rem 1rem;
+  border-radius: 8px;
+  border: none;
+  cursor: pointer;
+}
+.cta .primary { background: #0b69ff; color: white; }
+.cta .secondary { background: transparent; color: #0b69ff; border: 1px solid #0b69ff; }
+
+.features {
+  display: flex;
+  gap: 1rem;
+  margin-top: 2rem;
+  justify-content: center;
+}
+.feature {
+  background: white;
+  padding: 1rem;
+  border-radius: 8px;
+  width: 220px;
+  box-shadow: 0 4px 12px rgba(11,42,74,0.05);
+}
+
+/* Estilos para los formularios de autenticación */
+.auth-card {
+  max-width: 420px;
+  margin: 2rem auto;
+  padding: 1.25rem;
+  border-radius: 10px;
+  background: linear-gradient(180deg,#ffffff,#fbfdff);
+  box-shadow: 0 8px 30px rgba(11,42,74,0.06);
+}
+.auth-form {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+.auth-form input {
+  padding: 0.6rem 0.8rem;
+  border-radius: 6px;
+  border: 1px solid #d7e6f8;
+}
+.auth-form button {
+  padding: 0.6rem 0.8rem;
+  border-radius: 6px;
+  border: none;
+  background: #0b69ff;
+  color: white;
+  cursor: pointer;
+}
+
+.back-button {
+  margin: 1rem;
+  background: transparent;
+  border: none;
+  color: #0b69ff;
+  cursor: pointer;
+}
+
+.link-button {
+  background: transparent;
+  border: none;
+  color: #0b69ff;
+  cursor: pointer;
+  text-decoration: underline;
+  padding: 0;
+  font-size: 0.95rem;
+}
+
+@media (max-width: 720px) {
+  .features { flex-direction: column; }
+}
+
+/* Estilos para la página de Simulación */
+.sim-wrap{
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  padding:40px
+}
+.sim-card{
+  background:#fff;
+  padding:20px;
+  border-radius:12px;
+  box-shadow:0 10px 30px rgba(10,20,40,0.06);
+  max-width:520px;
+  width:100%
+}
+.sim-card h2{
+  margin:0 0 12px
+}
+.sim-card label{
+  display:block;
+  margin-bottom:10px;
+  font-size:14px
+}
+.sim-card input{
+  width:100%;
+  padding:8px 10px;
+  margin-top:6px;
+  border-radius:8px;
+  border:1px solid #e6eefc
+}
+.sim-card button{
+  margin-top:12px;
+  background:#0f172a;
+  color:#fff;
+  padding:10px 14px;
+  border-radius:8px;
+  border:0
+}
+.form-error{
+  background:#ffe6e6;
+  color:#800;
+  padding:8px;
+  border-radius:8px;
+  margin-bottom:8px
+}
+.form-ok{
+  background:#e6ffef;
+  color:#064;
+  padding:8px;
+  border-radius:8px;
+  margin-bottom:8px
+}
