@@ -1,35 +1,35 @@
+// Archivo: server/index.js
+
 const express = require('express');
-const pool = require('./db'); // Importar la conexión
+const cors = require('cors'); // Importar cors
+const { createUserTable } = require('./api/auth/auth.model'); // Importar función para crear tabla
+const authRoutes = require('./api/auth/auth.routes'); // Importar nuestras nuevas rutas
+
 const app = express();
-const port = 3000;
+const port = 3000; // El puerto DENTRO de Docker
 
-// Ruta de prueba que guarda un mensaje en la base de datos
-app.get('/save', async (req, res) => {
-  try {
-    await pool.query('CREATE TABLE IF NOT EXISTS messages (id SERIAL PRIMARY KEY, content TEXT)');
-    await pool.query('INSERT INTO messages (content) VALUES ($1)', ['Hola desde PostgreSQL!']);
-    res.send('Mensaje guardado en la base de datos');
-  } catch (err) {
-    console.error(err);
-    res.status(500).send('Error');
-  }
-});
+// --- Middlewares (configuraciones) ---
+app.use(cors()); // Habilita CORS para permitir peticiones desde el frontend
+app.use(express.json()); // Permite que el servidor entienda peticiones con body en formato JSON
 
-// Ruta para obtener todos los mensajes
-app.get('/messages', async (req, res) => {
-  try {
-    const result = await pool.query('SELECT * FROM messages');
-    res.json(result.rows);
-  } catch (err) {
-    console.error(err);
-    res.status(500).send('Error');
-  }
-});
+// --- Rutas ---
+app.use('/api/auth', authRoutes); // Le decimos al servidor que use nuestras rutas de autenticación
 
+// Ruta de bienvenida
 app.get('/', (req, res) => {
-  res.send('¡Bienvenido! Usa /save para guardar un mensaje y /messages para verlos.');
+  res.send('¡API de autenticación funcionando!');
 });
 
-app.listen(port, () => {
-  console.log(`App corriendo en http://localhost:${port}`);
-});
+// --- Iniciar Servidor ---
+const startServer = async () => {
+    try {
+        await createUserTable(); // Asegurarse de que la tabla de usuarios exista
+        app.listen(port, () => {
+            console.log(`Servidor corriendo en el puerto ${port}`);
+        });
+    } catch (error) {
+        console.error("No se pudo iniciar el servidor:", error);
+    }
+};
+
+startServer();
