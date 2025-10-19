@@ -9,6 +9,8 @@ const createUserTable = async () => {
             id SERIAL PRIMARY KEY,
             email VARCHAR(255) UNIQUE NOT NULL,
             password_hash VARCHAR(255) NOT NULL,
+            rut VARCHAR(32),
+            birthdate DATE,
             created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
         );
     `;
@@ -23,10 +25,10 @@ const findUserByEmail = async (email) => {
 };
 
 // Función para crear un nuevo usuario en la BD
-const createUser = async (email, passwordHash) => {
+const createUser = async (email, passwordHash, rut = null, birthdate = null) => {
     const result = await pool.query(
-        'INSERT INTO users (email, password_hash) VALUES ($1, $2) RETURNING id, email',
-        [email, passwordHash]
+        'INSERT INTO users (email, password_hash, rut, birthdate) VALUES ($1, $2, $3, $4) RETURNING id, email, rut, birthdate',
+        [email, passwordHash, rut, birthdate]
     );
     return result.rows[0];
 };

@@ -9,9 +9,20 @@ const JWT_SECRET = 'un_secreto_muy_secreto_que_debes_cambiar';
 // Controlador para la ruta de Registro
 exports.register = async (req, res) => {
     try {
-        const { email, password } = req.body;
+        const { email, password, rut, birthdate } = req.body;
         if (!email || !password || password.length < 6) {
             return res.status(400).json({ message: "Por favor, proporciona un email y una contraseña de al menos 6 caracteres." });
+        }
+        if (!rut) {
+            return res.status(400).json({ message: "RUT es requerido." });
+        }
+        // Basic server-side RUT format validation: digits, hyphen, digit or K
+        const rutRegex = /^[0-9]+-[0-9kK]$/;
+        if (!rutRegex.test(rut)) {
+            return res.status(400).json({ message: "Formato de RUT inválido. Debe ser sin puntos y con guion (p.ej. 12345678-9)." });
+        }
+        if (!birthdate) {
+            return res.status(400).json({ message: "Fecha de nacimiento es requerida." });
         }
 
         const existingUser = await User.findUserByEmail(email);
@@ -20,7 +31,7 @@ exports.register = async (req, res) => {
         }
 
         const passwordHash = await bcrypt.hash(password, 10);
-        const newUser = await User.createUser(email, passwordHash);
+        const newUser = await User.createUser(email, passwordHash, rut, birthdate);
 
         res.status(201).json({ message: "Usuario registrado con éxito", user: newUser });
     } catch (error) {
