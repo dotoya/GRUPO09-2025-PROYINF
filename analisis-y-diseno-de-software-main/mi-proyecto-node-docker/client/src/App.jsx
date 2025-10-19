@@ -6,6 +6,7 @@ import Login from './components/Login';
 import Register from './components/Register';
 // --- 1. IMPORTAMOS LA NUEVA VISTA ---
 import ClientPortal from './components/ClientPortal';
+import Simulacion from './components/Simulacion';
 
 function App() {
   const [view, setView] = useState('home'); // 'home' | 'login' | 'register' | 'portal'
@@ -35,33 +36,7 @@ function App() {
   }
 
   if (view === 'simulacion') {
-    return (
-      <div className="App">
-        <button className="back-button" onClick={() => setView('home')}>&larr; Volver</button>
-        <div className="sim-wrap">
-          <form className="sim-card">
-            <h2>Simulador de crédito</h2>
-            <label>
-              RUT
-              <input placeholder="12345678-9" required />
-            </label>
-            <label>
-              Monto necesario
-              <input type="number" placeholder="1000000" required />
-            </label>
-            <label>
-              Renta mensual
-              <input type="number" placeholder="500000" required />
-            </label>
-            <label>
-              Cantidad de cuotas
-              <input type="number" placeholder="12" required />
-            </label>
-            <button type="submit">Iniciar simulación</button>
-          </form>
-        </div>
-      </div>
-    );
+    return <Simulacion onBack={() => setView('home')} />;
   }
 
   // --- 3. AÑADIMOS LA LÓGICA PARA MOSTRAR LA NUEVA VISTA ---
