@@ -1,33 +1,43 @@
+// Archivo: client/src/components/Simulador.jsx
+
 import React, { useState } from 'react';
 
-export default function Simulacion({ onBack }) {
-  const [rut, setRut] = useState('');
-  const [edad, setEdad] = useState('');
-  const [monto, setMonto] = useState('');
-  const [renta, setRenta] = useState('');
-  const [cuotas, setCuotas] = useState('');
-  const [result, setResult] = useState(null);
+// Estado inicial para el formulario y los resultados
+const initialState = { rut: '', edad: '', monto: '', renta: '', cuotas: '' };
+const initialResults = null;
+
+export default function Simulador({ onBack }) { // Asegurándonos de que reciba onBack
+  const [formData, setFormData] = useState(initialState);
+  const [results, setResults] = useState(initialResults);
+  const [isLoading, setIsLoading] = useState(false);
+
+  const handleChange = (e) => {
+    setFormData({ ...formData, [e.target.name]: e.target.value });
+  };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    try {
-      const rutRegex = /^[0-9]+-[0-9kK]$/;
-      if (!rutRegex.test(rut)) throw new Error('RUT inválido (sin puntos, con guion).');
-      if (!edad || Number(edad) < 18) throw new Error('Edad inválida (>=18).');
-      if (!monto || Number(monto) <= 0) throw new Error('Monto inválido.');
-      if (!renta || Number(renta) <= 0) throw new Error('Renta inválida.');
-      if (!cuotas || Number(cuotas) <= 0) throw new Error('Cantidad de cuotas inválida.');
+    setIsLoading(true);
+    setResults(null);
 
+    try {
       const response = await fetch('http://localhost:3001/api/simulacion', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ rut, edad, monto, renta, cuotas }),
+        body: JSON.stringify(formData),
       });
+
       const data = await response.json();
-      if (!response.ok) throw new Error(data.message || 'Error en simulación');
-      setResult(data.result);
-    } catch (err) {
-      alert(`Error: ${err.message}`);
+      if (!response.ok) {
+        throw new Error(data.message || 'Error en la simulación desde el servidor');
+      }
+
+      setResults(data.result);
+
+    } catch (error) {
+      alert(`Error: ${error.message}`);
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -39,32 +49,38 @@ export default function Simulacion({ onBack }) {
           <h2>Simulador de crédito</h2>
           <label>
             RUT
-            <input placeholder="12345678-9" value={rut} onChange={(e) => setRut(e.target.value)} required />
+            <input name="rut" placeholder="12345678-9" value={formData.rut} onChange={handleChange} required />
           </label>
           <label>
             Edad
-            <input type="number" placeholder="18" value={edad} onChange={(e) => setEdad(e.target.value)} required />
+            <input name="edad" type="number" placeholder="18" value={formData.edad} onChange={handleChange} required />
           </label>
           <label>
             Monto necesario
-            <input type="number" placeholder="1000000" value={monto} onChange={(e) => setMonto(e.target.value)} required />
+            <input name="monto" type="number" placeholder="1000000" value={formData.monto} onChange={handleChange} required />
           </label>
           <label>
             Renta mensual
-            <input type="number" placeholder="500000" value={renta} onChange={(e) => setRenta(e.target.value)} required />
+            <input name="renta" type="number" placeholder="500000" value={formData.renta} onChange={handleChange} required />
           </label>
           <label>
             Cantidad de cuotas
-            <input type="number" placeholder="12" value={cuotas} onChange={(e) => setCuotas(e.target.value)} required />
+            <input name="cuotas" type="number" placeholder="12" value={formData.cuotas} onChange={handleChange} required />
           </label>
-          <button type="submit">Iniciar simulación</button>
+          <button type="submit" disabled={isLoading}>
+            {isLoading ? 'Calculando...' : 'Iniciar simulación'}
+          </button>
         </form>
-        {result && (
-          <div className="sim-result">
-            <h3>Resultado</h3>
-            <p>Cuota mensual: {result.cuotaMensual}</p>
-            <p>Monto solicitado: {result.montoSolicitado}</p>
-            <p>Cuotas: {result.cuotas}</p>
+
+        {/* --- SECCIÓN DE RESULTADOS MEJORADA --- */}
+        {results && (
+          <div className="sim-card results-card">
+            <h3>Resultado de tu Simulación</h3>
+            <p><strong>Valor Cuota Mensual:</strong> ${results.valorCuota?.toLocaleString('es-CL')}</p>
+            <p><strong>Costo Total del Crédito:</strong> ${results.costoTotal?.toLocaleString('es-CL')}</p>
+            <p><strong>Tasa de Interés Mensual Aplicada:</strong> {results.tasaMensual}%</p>
+            <p><strong>Carga Anual Equivalente (CAE):</strong> {results.cae}%</p>
+            <small>Este es un cálculo referencial y no constituye una oferta.</small>
           </div>
         )}
       </div>
