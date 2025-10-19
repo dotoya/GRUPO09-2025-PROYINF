@@ -1,31 +1,35 @@
 // Archivo: server/index.js
 
 const express = require('express');
-const cors = require('cors');
-// 1. CORRECCIÓN: Importamos la función con su nuevo nombre 'createTables'.
-const { createTables } = require('./api/auth/auth.model');
-const authRoutes = require('./api/auth/auth.routes');
+const cors = require('cors'); // Importar cors
+const { createUserTable } = require('./api/auth/auth.model'); // Importar función para crear tabla
+const authRoutes = require('./api/auth/auth.routes'); // Importar nuestras nuevas rutas
 
 const app = express();
-const port = 3000;
+const port = 3000; // El puerto DENTRO de Docker
 
-app.use(cors());
-app.use(express.json());
+// --- Middlewares (configuraciones) ---
+app.use(cors()); // Habilita CORS para permitir peticiones desde el frontend
+app.use(express.json()); // Permite que el servidor entienda peticiones con body en formato JSON
 
-app.use('/api/auth', authRoutes);
+// --- Rutas ---
+app.use('/api/auth', authRoutes); // Le decimos al servidor que use nuestras rutas de autenticación
 
+// Ruta de bienvenida
+app.get('/', (req, res) => {
+res.send('¡API de autenticación funcionando!');
+});
+
+// --- Iniciar Servidor ---
 const startServer = async () => {
     try {
-        // 2. CORRECCIÓN: Llamamos a la función con su nuevo nombre 'createTables'.
-        await createTables();
+        await createUserTable(); // Asegurarse de que la tabla de usuarios exista
         app.listen(port, () => {
-            console.log(`Servidor corriendo en el puerto ${port}. Listo para recibir peticiones.`);
+            console.log(`Servidor corriendo en el puerto ${port}`);
         });
     } catch (error) {
-        // Mejoramos el mensaje de error para que sea más claro
-        console.error("No se pudo iniciar el servidor:", error.message);
+        console.error("No se pudo iniciar el servidor:", error);
     }
 };
 
 startServer();
-
