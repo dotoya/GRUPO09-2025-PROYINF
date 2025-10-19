@@ -4,6 +4,7 @@ const express = require('express');
 const cors = require('cors'); // Importar cors
 const { createUserTable } = require('./api/auth/auth.model'); // Importar función para crear tabla
 const authRoutes = require('./api/auth/auth.routes'); // Importar nuestras nuevas rutas
+const simulacionRoutes = require('./api/simulacion/simulacion.routes'); // Importar rutas de simulacion
 
 const app = express();
 const port = 3000; // El puerto DENTRO de Docker
@@ -14,6 +15,7 @@ app.use(express.json()); // Permite que el servidor entienda peticiones con body
 
 // --- Rutas ---
 app.use('/api/auth', authRoutes); // Le decimos al servidor que use nuestras rutas de autenticación
+app.use('/api/simulacion', simulacionRoutes); // Le decimos al servidor que use nuestras rutas de simulacion
 
 // Ruta de bienvenida
 app.get('/', (req, res) => {
