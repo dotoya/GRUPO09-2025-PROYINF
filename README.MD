@@ -18,12 +18,27 @@ Puede acceder a la Wiki mediante el siguiente [enlace](https://github.com/dotoya
 
 ## Indicaciones para levantar el proyecto
 
-* abrir la terminal en la dirección de la carpeta mi-proyecto-node-docker
-* en la terminal, ejecutar: docker compose up --build
-* abrir el navegador web de preferencia e ir al siguiente url: http://localhost:3000
-* para crear la tabla clientes en la base de datos, para que queden los usuarios registrados se debe ingresar al siguiente url: http://localhost:3000/table-cliente
+Para levantar el proyecto, sigue estos pasos:
 
-## Aspectos técnicos relevantes
+1.  **Levantar el Backend (Base de Datos y Servidor):**
+    * Abre una terminal en la carpeta raíz `mi-proyecto-node-docker`.
+    * Ejecuta el siguiente comando y déjalo corriendo:
+        ```bash
+        docker compose up
+        ```
 
-* no funciona el log in y tampoco funciona el registro si el rut termina en -k
-* El proyecto actual corresponde a una base inicial de lo que será el proyecto final. Las historias de usuario representan los objetivos a alcanzar, sin embargo, aún no se encuentran implementadas.
+2.  **Levantar el Frontend (Cliente):**
+    * Abre una **segunda terminal** (sin cerrar la primera).
+    * Ingresa a la carpeta `client`.
+    * Ejecuta los siguientes comandos:
+        ```bash
+        # Instala las dependencias (solo la primera vez)
+        npm install
+        
+        # Inicia el servidor de desarrollo
+        npm run dev
+        ```
+
+3.  **Acceder a la Aplicación:**
+    * Luego de ejecutar `npm run dev`, la terminal te mostrará un enlace local (usualmente algo como `http://localhost:5173`).
+    * Abre ese enlace en tu navegador para ver la página web.
