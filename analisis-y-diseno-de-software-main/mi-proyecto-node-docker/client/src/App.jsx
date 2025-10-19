@@ -4,14 +4,16 @@ import React, { useState } from 'react';
 import './App.css';
 import Login from './components/Login';
 import Register from './components/Register';
+// --- 1. IMPORTAMOS LA NUEVA VISTA ---
+import ClientPortal from './components/ClientPortal';
 
 function App() {
-  const [view, setView] = useState('home'); // 'home' | 'login' | 'register'
+  const [view, setView] = useState('home'); // 'home' | 'login' | 'register' | 'portal'
 
   const handleAuthSuccess = () => {
-    // Simular redirección a panel del usuario tras login/registro
-    setView('home');
-    alert('Autenticación exitosa. Bienvenido al banco.');
+    // --- 2. ESTE ES EL CAMBIO PRINCIPAL ---
+    // En lugar de mostrar una alerta y volver a 'home', ahora te llevamos al portal.
+    setView('portal'); 
   };
 
   if (view === 'login') {
@@ -62,6 +64,12 @@ function App() {
     );
   }
 
+  // --- 3. AÑADIMOS LA LÓGICA PARA MOSTRAR LA NUEVA VISTA ---
+  if (view === 'portal') {
+    return <ClientPortal onGoHome={() => setView('home')} />;
+  }
+
+  // Tu página de inicio se queda exactamente igual.
   return (
     <div className="App bank-home">
       <header className="hero">
