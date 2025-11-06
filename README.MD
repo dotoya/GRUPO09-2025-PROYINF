@@ -15,6 +15,8 @@ Puede acceder a la Wiki mediante el siguiente [enlace](https://github.com/dotoya
 ## Videos
 
 * [Video presentación cliente](https://aula.usm.cl/pluginfile.php/7621199/mod_resource/content/2/video1352931478.mp4)
+* [Test Hito3](https://youtu.be/VIYJMNx5HbE)
+
 
 ## Indicaciones para levantar el proyecto
 
@@ -24,7 +26,7 @@ Para levantar el proyecto, sigue estos pasos:
     * Abre una terminal en la carpeta raíz `mi-proyecto-node-docker`.
     * Ejecuta el siguiente comando y déjalo corriendo:
         ```bash
-        docker compose up
+        sudo docker-compose up --build
         ```
 
 2.  **Levantar el Frontend (Cliente):**
@@ -42,3 +44,5 @@ Para levantar el proyecto, sigue estos pasos:
 3.  **Acceder a la Aplicación:**
     * Luego de ejecutar `npm run dev`, la terminal te mostrará un enlace local (usualmente algo como `http://localhost:5173`).
     * Abre ese enlace en tu navegador para ver la página web.
+
+

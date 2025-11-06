@@ -49,27 +49,27 @@ function App() {
     <div className="App bank-home">
       <header className="hero">
         <img src="/vite.svg" className="logo" alt="logo" />
-        <h1>Banco Nuevo Horizonte</h1>
-        <p>Tu dinero seguro. Operaciones claras. Atención siempre disponible.</p>
+        <h1>Banco al Polar</h1>
+        <p>Donde somos tu mayor apoyo.</p>
         <div className="cta">
           <button onClick={() => setView('login')} className="primary">Iniciar Sesión</button>
-          <button onClick={() => setView('register')} className="secondary">Abrir cuenta</button>
+          <button onClick={() => setView('register')} className="secondary">Registrar</button>
           <button onClick={() => setView('simulacion')} className="secondary">Simulación</button>
         </div>
       </header>
 
       <section className="features">
         <div className="feature">
-          <h3>Cuentas</h3>
-          <p>Cuenta corriente y ahorro con beneficios y sin comisiones ocultas.</p>
+          <h3>Prestamo</h3>
+          <p>Prestamos sencillos y seguros.</p>
         </div>
         <div className="feature">
-          <h3>Préstamos</h3>
-          <p>Préstamos rápidos con tasas competitivas y plazos flexibles.</p>
+          <h3>Pagos</h3>
+          <p>Formas de pago justas y con recordatorios apropiados.</p>
         </div>
         <div className="feature">
-          <h3>Soporte 24/7</h3>
-          <p>Asistencia por chat y teléfono, siempre que la necesites.</p>
+          <h3>Ayuda al cliente</h3>
+          <p>Porque sabemos los confuso que puede ser hacer un prestamo.</p>
         </div>
       </section>
     </div>
