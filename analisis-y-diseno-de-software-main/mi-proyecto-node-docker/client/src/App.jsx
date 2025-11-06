@@ -7,14 +7,15 @@ import Register from './components/Register';
 // --- 1. IMPORTAMOS LA NUEVA VISTA ---
 import ClientPortal from './components/ClientPortal';
 import Simulacion from './components/Simulacion';
+import Solicitud from './components/Solicitud';
 
 function App() {
   const [view, setView] = useState('home'); // 'home' | 'login' | 'register' | 'portal'
 
   const handleAuthSuccess = () => {
-    // --- 2. ESTE ES EL CAMBIO PRINCIPAL ---
-    // En lugar de mostrar una alerta y volver a 'home', ahora te llevamos al portal.
-    setView('portal'); 
+    // --- 2. REDIRECCIÓN TRAS LOGIN EXITOSO ---
+    // Si el inicio de sesión funciona, llevar al usuario a la vista de simulación.
+    setView('simulacion');
   };
 
   if (view === 'login') {
@@ -36,7 +37,11 @@ function App() {
   }
 
   if (view === 'simulacion') {
-    return <Simulacion onBack={() => setView('home')} onRequestLogin={() => setView('login')} />;
+    return <Simulacion onBack={() => setView('home')} onRequestSolicitud={() => setView('solicitud')} />;
+  }
+
+  if (view === 'solicitud') {
+    return <Solicitud onBack={() => setView('home')} />;
   }
 
   // --- 3. AÑADIMOS LA LÓGICA PARA MOSTRAR LA NUEVA VISTA ---

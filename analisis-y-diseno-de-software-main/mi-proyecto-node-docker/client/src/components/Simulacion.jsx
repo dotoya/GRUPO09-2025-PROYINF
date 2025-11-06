@@ -6,7 +6,7 @@ import React, { useState } from 'react';
 const initialState = { rut: '', edad: '', monto: '', renta: '', cuotas: '' };
 const initialResults = null;
 
-export default function Simulador({ onBack, onRequestLogin }) { // Asegurándonos de que reciba onBack y onRequestLogin
+export default function Simulador({ onBack, onRequestSolicitud }) { // Asegurándonos de que reciba onBack y onRequestSolicitud
   const [formData, setFormData] = useState(initialState);
   const [results, setResults] = useState(initialResults);
   const [isLoading, setIsLoading] = useState(false);
@@ -41,18 +41,17 @@ export default function Simulador({ onBack, onRequestLogin }) { // Asegurándono
     }
   };
 
-  const redirectToLogin = () => {
-    // Preferir la navegación delegada al padre (App) para mantener la SPA stateful.
-    if (typeof onRequestLogin === 'function') {
-      onRequestLogin();
+  const redirectToSolicitud = () => {
+    // Si el padre (App) provee la función para abrir la página de solicitud, usarla.
+    if (typeof onRequestSolicitud === 'function') {
+      onRequestSolicitud();
       return;
     }
-    // Fallback directo si se usa el componente fuera del App que controla vistas.
+    // Si no, como fallback intentar abrir una ruta /solicitud (o /login si no existe).
     try {
-      window.location.href = '/login';
-
+      window.location.href = '/solicitud';
     } catch (e) {
-      window.location.href = '/#/login';
+      window.location.href = '/#/solicitud';
     }
   };
 
@@ -100,7 +99,7 @@ export default function Simulador({ onBack, onRequestLogin }) { // Asegurándono
               <button
                 type="button"
                 className="login-redirect-button"
-                onClick={redirectToLogin}
+                onClick={redirectToSolicitud}
               >
                 Solicitar crédito
               </button>
