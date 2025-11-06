@@ -97,6 +97,7 @@ export default function Simulador({ onBack, onRequestLogin }) { // Asegurándono
             <p><strong>Carga Anual Equivalente (CAE):</strong> {results.cae}%</p>
             <small>Este es un cálculo referencial y no constituye una oferta.</small>
             <div style={{ marginTop: '12px' }}>
+              {/* Botón para redirigir a iniciar sesión y poder solicitar el crédito */}
               <button
                 type="button"
                 className="login-redirect-button"
