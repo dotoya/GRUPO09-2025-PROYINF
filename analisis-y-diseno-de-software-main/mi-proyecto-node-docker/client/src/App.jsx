@@ -36,7 +36,7 @@ function App() {
   }
 
   if (view === 'simulacion') {
-    return <Simulacion onBack={() => setView('home')} />;
+    return <Simulacion onBack={() => setView('home')} onRequestLogin={() => setView('login')} />;
   }
 
   // --- 3. AÑADIMOS LA LÓGICA PARA MOSTRAR LA NUEVA VISTA ---

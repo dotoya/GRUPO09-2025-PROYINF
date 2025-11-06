@@ -6,7 +6,7 @@ import React, { useState } from 'react';
 const initialState = { rut: '', edad: '', monto: '', renta: '', cuotas: '' };
 const initialResults = null;
 
-export default function Simulador({ onBack }) { // Asegurándonos de que reciba onBack
+export default function Simulador({ onBack, onRequestLogin }) { // Asegurándonos de que reciba onBack y onRequestLogin
   const [formData, setFormData] = useState(initialState);
   const [results, setResults] = useState(initialResults);
   const [isLoading, setIsLoading] = useState(false);
@@ -38,6 +38,21 @@ export default function Simulador({ onBack }) { // Asegurándonos de que reciba 
       alert(`Error: ${error.message}`);
     } finally {
       setIsLoading(false);
+    }
+  };
+
+  const redirectToLogin = () => {
+    // Preferir la navegación delegada al padre (App) para mantener la SPA stateful.
+    if (typeof onRequestLogin === 'function') {
+      onRequestLogin();
+      return;
+    }
+    // Fallback directo si se usa el componente fuera del App que controla vistas.
+    try {
+      window.location.href = '/login';
+
+    } catch (e) {
+      window.location.href = '/#/login';
     }
   };
 
@@ -81,6 +96,15 @@ export default function Simulador({ onBack }) { // Asegurándonos de que reciba 
             <p><strong>Tasa de Interés Mensual Aplicada:</strong> {results.tasaMensual}%</p>
             <p><strong>Carga Anual Equivalente (CAE):</strong> {results.cae}%</p>
             <small>Este es un cálculo referencial y no constituye una oferta.</small>
+            <div style={{ marginTop: '12px' }}>
+              <button
+                type="button"
+                className="login-redirect-button"
+                onClick={redirectToLogin}
+              >
+                Solicitar crédito
+              </button>
+            </div>
           </div>
         )}
       </div>
