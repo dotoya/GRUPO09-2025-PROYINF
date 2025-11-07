@@ -15,6 +15,7 @@ services:
       - DB_PASSWORD=password
       - DB_NAME=mydb
 
+
       # --- RELLENA ESTAS 4 LÍNEAS ---
 
     depends_on:
