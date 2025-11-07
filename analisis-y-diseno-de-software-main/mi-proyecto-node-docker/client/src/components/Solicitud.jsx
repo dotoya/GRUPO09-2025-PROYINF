@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import './Login.css'; // reutilizamos estilos simples
 
-export default function Solicitud({ userData, simulacionData, onBack }) {
+export default function Solicitud({ userData, simulacionData, onBack, onConfirmar }) {
   const [form, setForm] = useState({
     nombre: userData?.nombre || '',
     apellido: userData?.apellido || '',
@@ -51,24 +51,20 @@ export default function Solicitud({ userData, simulacionData, onBack }) {
     e.preventDefault();
     setSending(true);
     try {
-      // En producción deberías apuntar a tu endpoint real, aquí es solo un ejemplo.
-      // Usamos FormData para incluir la imagen (si se adjunta).
-      const formData = new FormData();
-      Object.keys(form).forEach((key) => formData.append(key, form[key]));
-      if (file) formData.append('imagen', file);
-
-      const res = await fetch('http://localhost:3001/api/solicitud', {
-        method: 'POST',
-        // No establecer Content-Type: el navegador asigna el boundary automáticamente
-        body: formData,
-      });
-      if (!res.ok) {
-        const err = await res.json().catch(() => ({}));
-        throw new Error(err.message || 'Error al enviar la solicitud');
+      // Validar campos requeridos
+      const requiredFields = ['nombre', 'apellido', 'rut', 'email'];
+      for (const field of requiredFields) {
+        if (!form[field]) {
+          throw new Error(`Por favor completa el campo ${field}`);
+        }
       }
-      setSent(true);
+      
+      // En vez de enviar, guardamos los datos y vamos a confirmar identidad
+      if (onConfirmar) {
+        onConfirmar(form);
+      }
     } catch (err) {
-      alert('No se pudo enviar la solicitud: ' + err.message);
+      alert(err.message);
     } finally {
       setSending(false);
     }
@@ -112,7 +108,7 @@ export default function Solicitud({ userData, simulacionData, onBack }) {
             </div>
           </div>
         )}
-        <button type="submit" disabled={sending}>{sending ? 'Enviando...' : 'Enviar solicitud'}</button>
+        <button type="submit" disabled={sending}>{sending ? 'Procesando...' : 'Confirmar que eres tú'}</button>
       </form>
     </div>
   );

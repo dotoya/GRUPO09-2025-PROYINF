@@ -8,11 +8,13 @@ import Register from './components/Register';
 import ClientPortal from './components/ClientPortal';
 import Simulacion from './components/Simulacion';
 import Solicitud from './components/Solicitud';
+import Foto from './components/Foto';
 
 function App() {
-  const [view, setView] = useState('home'); // 'home' | 'login' | 'register' | 'portal'
+  const [view, setView] = useState('home'); // 'home' | 'login' | 'register' | 'portal' | 'foto'
   const [userData, setUserData] = useState(null);
   const [simulacionData, setSimulacionData] = useState(null);
+  const [solicitudData, setSolicitudData] = useState(null);
 
   // Si hay token pero no datos de usuario, redirigir a login
   React.useEffect(() => {
@@ -81,6 +83,36 @@ function App() {
         userData={userData} 
         simulacionData={simulacionData} 
         onBack={() => setView('simulacion')} 
+        onConfirmar={(formData) => {
+          setSolicitudData(formData);
+          setView('foto');
+        }}
+      />
+    );
+  }
+
+  if (view === 'foto') {
+    // Si no hay datos previos, redirigir a solicitud
+    if (!solicitudData || !userData) {
+      return <Solicitud 
+        userData={userData}
+        simulacionData={simulacionData}
+        onBack={() => setView('simulacion')}
+        onConfirmar={(formData) => {
+          setSolicitudData(formData);
+          setView('foto');
+        }}
+      />;
+    }
+    return (
+      <Foto
+        userData={userData}
+        solicitudData={solicitudData}
+        onBack={() => setView('solicitud')}
+        onSuccess={() => {
+          alert('¡Solicitud enviada con éxito!');
+          setView('home');
+        }}
       />
     );
   }
