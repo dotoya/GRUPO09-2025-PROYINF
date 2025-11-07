@@ -27,10 +27,8 @@ Instrucciones breves:
 - Localice la sección marcada exactamente con:
   # --- RELLENA ESTAS 4 LÍNEAS ---
 - Copie el contenido desde `Codigo_copia.pdf` y péguelo en lugar de esas 4 líneas.
-- Guarde `docker-compose.yml` y luego ejecute:
-  ```bash
-  sudo docker-compose up --build
-  ```
+- Guarde `docker-compose.yml`.
+ 
 Esto es imprescindible para que el backend (base de datos y servidor) pueda levantarse correctamente.
 
 
@@ -64,5 +62,6 @@ Para levantar el proyecto, sigue estos pasos:
 ## Documentación
 
 La documentación completa de la API se encuentra en la carpeta `api` del servidor. Puedes encontrar toda la información detallada sobre los endpoints, modelos y funcionalidades en el archivo `README.md` dentro de esa carpeta.
+
 
 
