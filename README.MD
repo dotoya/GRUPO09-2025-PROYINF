@@ -45,4 +45,7 @@ Para levantar el proyecto, sigue estos pasos:
     * Luego de ejecutar `npm run dev`, la terminal te mostrará un enlace local (usualmente algo como `http://localhost:5173`).
     * Abre ese enlace en tu navegador para ver la página web.
 
+## Documentación
+
+La documentación completa de la API se encuentra en la carpeta `api` del servidor. Puedes encontrar toda la información detallada sobre los endpoints, modelos y funcionalidades en el archivo `README.md` dentro de esa carpeta.
 
