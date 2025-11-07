@@ -33,8 +33,10 @@ exports.register = async (req, res) => {
         const passwordHash = await bcrypt.hash(password, 10);
         const newUser = await User.createUser(email, passwordHash, rut, birthdate);
 
+        console.log("✅ Usuario creado:", newUser);
         res.status(201).json({ message: "Usuario registrado con éxito", user: newUser });
     } catch (error) {
+        console.error("💥 Error en /register:", error);
         res.status(500).json({ message: "Error en el servidor", error: error.message });
     }
 };

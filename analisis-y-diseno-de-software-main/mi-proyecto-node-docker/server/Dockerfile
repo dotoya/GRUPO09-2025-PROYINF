@@ -1,18 +1,20 @@
-# server/Dockerfile
+# 1. CAMBIO CLAVE: Usamos la versión 20 de Node, que es lo que Azure necesita.
+FROM node:20-alpine
 
-FROM node:18-alpine
-
+# El resto de tu Dockerfile se queda igual
 WORKDIR /app
 
-# Copia solo los package.json para aprovechar el caché de Docker
+# El .dockerignore se encargará de 'node_modules' locales
 COPY package*.json ./
+
+# Este 'npm install' ahora se ejecutará en un entorno Node 20
 RUN npm install
 
-# Copia el resto del código de la aplicación
 COPY . .
 
-# Expone el puerto que la aplicación usará DENTRO del contenedor
+# El puerto que usa el servidor
 EXPOSE 3000
 
-# Comando para iniciar el servidor
-CMD ["node", "index.js"]
+# Usamos el script "start" de tu package.json
+# (Que debería ser "nodemon index.js" si seguiste el paso anterior)
+CMD ["npm", "start"]

@@ -1,6 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const controller = require('./verify.controller');
+console.log("✅ verify.routes cargado correctamente", controller);
 
 // Configuración de Multer para manejar subida de archivos en memoria
 const multer = require('multer');
