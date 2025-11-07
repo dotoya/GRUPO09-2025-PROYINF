@@ -141,4 +141,4 @@ La tabla `users` se define en PostgreSQL con la siguiente estructura:
 ---
 
 **Última actualización:** 06/11/2025  
-**Autor:** Equipo de Desarrollo – API Créditos
+
