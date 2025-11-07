@@ -6,8 +6,12 @@ import React, { useState } from 'react';
 const initialState = { rut: '', edad: '', monto: '', renta: '', cuotas: '' };
 const initialResults = null;
 
-export default function Simulador({ onBack, onRequestSolicitud }) { // Asegurándonos de que reciba onBack y onRequestSolicitud
-  const [formData, setFormData] = useState(initialState);
+export default function Simulador({ userData, onBack, onRequestSolicitud }) {
+  const [formData, setFormData] = useState({
+    ...initialState,
+    rut: userData?.rut || '',
+    email: userData?.email || ''
+  });
   const [results, setResults] = useState(initialResults);
   const [isLoading, setIsLoading] = useState(false);
 
@@ -42,16 +46,14 @@ export default function Simulador({ onBack, onRequestSolicitud }) { // Asegurán
   };
 
   const redirectToSolicitud = () => {
-    // Si el padre (App) provee la función para abrir la página de solicitud, usarla.
+    // Pasar tanto los datos del formulario como los resultados a la página de solicitud
+    const simulacionData = {
+      formulario: formData,
+      resultados: results
+    };
     if (typeof onRequestSolicitud === 'function') {
-      onRequestSolicitud();
+      onRequestSolicitud(simulacionData);
       return;
-    }
-    // Si no, como fallback intentar abrir una ruta /solicitud (o /login si no existe).
-    try {
-      window.location.href = '/solicitud';
-    } catch (e) {
-      window.location.href = '/#/solicitud';
     }
   };
 

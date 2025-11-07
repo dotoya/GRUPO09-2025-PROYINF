@@ -11,10 +11,21 @@ import Solicitud from './components/Solicitud';
 
 function App() {
   const [view, setView] = useState('home'); // 'home' | 'login' | 'register' | 'portal'
+  const [userData, setUserData] = useState(null);
+  const [simulacionData, setSimulacionData] = useState(null);
 
-  const handleAuthSuccess = () => {
+  // Si hay token pero no datos de usuario, redirigir a login
+  React.useEffect(() => {
+    const token = localStorage.getItem('token');
+    if (!token && (view === 'simulacion' || view === 'solicitud')) {
+      setView('login');
+    }
+  }, [view]);
+
+  const handleAuthSuccess = (data) => {
     // --- 2. REDIRECCIÓN TRAS LOGIN EXITOSO ---
     // Si el inicio de sesión funciona, llevar al usuario a la vista de simulación.
+    setUserData(data);
     setView('simulacion');
   };
 
@@ -37,11 +48,41 @@ function App() {
   }
 
   if (view === 'simulacion') {
-    return <Simulacion onBack={() => setView('home')} onRequestSolicitud={() => setView('solicitud')} />;
+    // Si no hay usuario logueado, redirigir a login
+    if (!userData) {
+      return <Login onSuccess={handleAuthSuccess} onCreateAccount={() => setView('register')} />;
+    }
+    return (
+      <Simulacion
+        userData={userData}
+        onBack={() => setView('home')}
+        onRequestSolicitud={(simData) => {
+          setSimulacionData(simData);
+          setView('solicitud');
+        }}
+      />
+    );
   }
 
   if (view === 'solicitud') {
-    return <Solicitud onBack={() => setView('home')} />;
+    // Si no hay datos de simulación o usuario, redirigir a simulación
+    if (!simulacionData || !userData) {
+      return <Simulacion 
+        userData={userData} 
+        onBack={() => setView('home')} 
+        onRequestSolicitud={(simData) => {
+          setSimulacionData(simData);
+          setView('solicitud');
+        }} 
+      />;
+    }
+    return (
+      <Solicitud 
+        userData={userData} 
+        simulacionData={simulacionData} 
+        onBack={() => setView('simulacion')} 
+      />
+    );
   }
 
   // --- 3. AÑADIMOS LA LÓGICA PARA MOSTRAR LA NUEVA VISTA ---

@@ -15,9 +15,14 @@ export default function Login({ onSuccess, onCreateAccount }) {
       });
       const data = await response.json();
       if (!response.ok) throw new Error(data.message || 'Error en login');
-      // En un caso real, guardar token en localStorage o contexto
+      // Guardar token y pasar datos de usuario al padre
       localStorage.setItem('token', data.token);
-      if (onSuccess) onSuccess();
+      const userData = {
+        email: loginEmail,
+        token: data.token,
+        ...data.user // asumiendo que el backend envía datos del usuario
+      };
+      if (onSuccess) onSuccess(userData);
     } catch (error) {
       alert(`Error en el login: ${error.message}`);
     }

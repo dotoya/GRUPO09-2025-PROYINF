@@ -1,15 +1,15 @@
 import React, { useState, useEffect } from 'react';
 import './Login.css'; // reutilizamos estilos simples
 
-export default function Solicitud({ onBack }) {
+export default function Solicitud({ userData, simulacionData, onBack }) {
   const [form, setForm] = useState({
-    nombre: '',
-    apellido: '',
-    rut: '',
-    email: '',
-    telefono: '',
-    direccion: '',
-    nacimiento: '',
+    nombre: userData?.nombre || '',
+    apellido: userData?.apellido || '',
+    rut: userData?.rut || simulacionData?.formulario?.rut || '',
+    email: userData?.email || simulacionData?.formulario?.email || '',
+    telefono: userData?.telefono || '',
+    direccion: userData?.direccion || '',
+    nacimiento: userData?.nacimiento || '',
   });
   const [file, setFile] = useState(null);
   const [preview, setPreview] = useState(null);
