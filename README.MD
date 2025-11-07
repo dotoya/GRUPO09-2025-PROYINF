@@ -25,7 +25,7 @@ Instrucciones breves:
 - Abra la carpeta raíz `mi-proyecto-node-docker`.
 - Abra (o cree) el archivo `docker-compose.yml`.
 - Localice la sección marcada exactamente con:
-  # --- RELLENA ESTAS 4 LÍNEAS ---
+   --- RELLENA ESTAS 4 LÍNEAS ---
 - Copie el contenido desde `Codigo_copia.pdf` y péguelo en lugar de esas 4 líneas.
 - Guarde `docker-compose.yml`.
  
@@ -62,6 +62,7 @@ Para levantar el proyecto, sigue estos pasos:
 ## Documentación
 
 La documentación completa de la API se encuentra en la carpeta `api` del servidor. Puedes encontrar toda la información detallada sobre los endpoints, modelos y funcionalidades en el archivo `README.md` dentro de esa carpeta.
+
 
 
 
