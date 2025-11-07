@@ -6,8 +6,12 @@ import React, { useState } from 'react';
 const initialState = { rut: '', edad: '', monto: '', renta: '', cuotas: '' };
 const initialResults = null;
 
-export default function Simulador({ onBack, onRequestLogin }) { // Asegurándonos de que reciba onBack y onRequestLogin
-  const [formData, setFormData] = useState(initialState);
+export default function Simulador({ userData, onBack, onRequestSolicitud }) {
+  const [formData, setFormData] = useState({
+    ...initialState,
+    rut: userData?.rut || '',
+    email: userData?.email || ''
+  });
   const [results, setResults] = useState(initialResults);
   const [isLoading, setIsLoading] = useState(false);
 
@@ -41,18 +45,15 @@ export default function Simulador({ onBack, onRequestLogin }) { // Asegurándono
     }
   };
 
-  const redirectToLogin = () => {
-    // Preferir la navegación delegada al padre (App) para mantener la SPA stateful.
-    if (typeof onRequestLogin === 'function') {
-      onRequestLogin();
+  const redirectToSolicitud = () => {
+    // Pasar tanto los datos del formulario como los resultados a la página de solicitud
+    const simulacionData = {
+      formulario: formData,
+      resultados: results
+    };
+    if (typeof onRequestSolicitud === 'function') {
+      onRequestSolicitud(simulacionData);
       return;
-    }
-    // Fallback directo si se usa el componente fuera del App que controla vistas.
-    try {
-      window.location.href = '/login';
-
-    } catch (e) {
-      window.location.href = '/#/login';
     }
   };
 
@@ -101,7 +102,7 @@ export default function Simulador({ onBack, onRequestLogin }) { // Asegurándono
               <button
                 type="button"
                 className="login-redirect-button"
-                onClick={redirectToLogin}
+                onClick={redirectToSolicitud}
               >
                 Solicitar crédito
               </button>

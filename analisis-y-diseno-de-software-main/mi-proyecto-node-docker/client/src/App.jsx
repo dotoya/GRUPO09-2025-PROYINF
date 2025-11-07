@@ -7,14 +7,28 @@ import Register from './components/Register';
 // --- 1. IMPORTAMOS LA NUEVA VISTA ---
 import ClientPortal from './components/ClientPortal';
 import Simulacion from './components/Simulacion';
+import Solicitud from './components/Solicitud';
+import Foto from './components/Foto';
 
 function App() {
-  const [view, setView] = useState('home'); // 'home' | 'login' | 'register' | 'portal'
+  const [view, setView] = useState('home'); // 'home' | 'login' | 'register' | 'portal' | 'foto'
+  const [userData, setUserData] = useState(null);
+  const [simulacionData, setSimulacionData] = useState(null);
+  const [solicitudData, setSolicitudData] = useState(null);
 
-  const handleAuthSuccess = () => {
-    // --- 2. ESTE ES EL CAMBIO PRINCIPAL ---
-    // En lugar de mostrar una alerta y volver a 'home', ahora te llevamos al portal.
-    setView('portal'); 
+  // Si hay token pero no datos de usuario, redirigir a login
+  React.useEffect(() => {
+    const token = localStorage.getItem('token');
+    if (!token && (view === 'simulacion' || view === 'solicitud')) {
+      setView('login');
+    }
+  }, [view]);
+
+  const handleAuthSuccess = (data) => {
+    // --- 2. REDIRECCIÓN TRAS LOGIN EXITOSO ---
+    // Si el inicio de sesión funciona, llevar al usuario a la vista de simulación.
+    setUserData(data);
+    setView('simulacion');
   };
 
   if (view === 'login') {
@@ -36,7 +50,71 @@ function App() {
   }
 
   if (view === 'simulacion') {
-    return <Simulacion onBack={() => setView('home')} onRequestLogin={() => setView('login')} />;
+    // Si no hay usuario logueado, redirigir a login
+    if (!userData) {
+      return <Login onSuccess={handleAuthSuccess} onCreateAccount={() => setView('register')} />;
+    }
+    return (
+      <Simulacion
+        userData={userData}
+        onBack={() => setView('home')}
+        onRequestSolicitud={(simData) => {
+          setSimulacionData(simData);
+          setView('solicitud');
+        }}
+      />
+    );
+  }
+
+  if (view === 'solicitud') {
+    // Si no hay datos de simulación o usuario, redirigir a simulación
+    if (!simulacionData || !userData) {
+      return <Simulacion 
+        userData={userData} 
+        onBack={() => setView('home')} 
+        onRequestSolicitud={(simData) => {
+          setSimulacionData(simData);
+          setView('solicitud');
+        }} 
+      />;
+    }
+    return (
+      <Solicitud 
+        userData={userData} 
+        simulacionData={simulacionData} 
+        onBack={() => setView('simulacion')} 
+        onConfirmar={(formData) => {
+          setSolicitudData(formData);
+          setView('foto');
+        }}
+      />
+    );
+  }
+
+  if (view === 'foto') {
+    // Si no hay datos previos, redirigir a solicitud
+    if (!solicitudData || !userData) {
+      return <Solicitud 
+        userData={userData}
+        simulacionData={simulacionData}
+        onBack={() => setView('simulacion')}
+        onConfirmar={(formData) => {
+          setSolicitudData(formData);
+          setView('foto');
+        }}
+      />;
+    }
+    return (
+      <Foto
+        userData={userData}
+        solicitudData={solicitudData}
+        onBack={() => setView('solicitud')}
+        onSuccess={() => {
+          alert('¡Solicitud enviada con éxito!');
+          setView('home');
+        }}
+      />
+    );
   }
 
   // --- 3. AÑADIMOS LA LÓGICA PARA MOSTRAR LA NUEVA VISTA ---
