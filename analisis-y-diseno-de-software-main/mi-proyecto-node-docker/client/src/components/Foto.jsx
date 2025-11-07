@@ -1,9 +1,13 @@
-import React, { useState } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import './Login.css'; // reutilizamos estilos base
 
 export default function Foto({ userData, solicitudData, onBack, onSuccess }) {
-  const [photo, setPhoto] = useState(null);
+  const [photo, setPhoto] = useState(null); // dataURL or null
   const [preview, setPreview] = useState(null);
+  const [capturing, setCapturing] = useState(false);
+  const videoRef = useRef(null);
+  const canvasRef = useRef(null);
+  const streamRef = useRef(null);
 
   const handlePhotoChange = (e) => {
     const file = e.target.files?.[0];
@@ -28,11 +32,62 @@ export default function Foto({ userData, solicitudData, onBack, onSuccess }) {
       return;
     }
 
-    setPhoto(file);
-    // Crear URL para preview
-    const previewUrl = URL.createObjectURL(file);
-    setPreview(previewUrl);
+    // Leer como dataURL para preview y envío consistente
+    const reader = new FileReader();
+    reader.onload = () => {
+      setPhoto(reader.result); // dataURL
+      setPreview(reader.result);
+      // Si la cámara estaba activa, detenerla
+      stopCamera();
+    };
+    reader.readAsDataURL(file);
   };
+
+  // start/stop/capture camera
+  const startCamera = async () => {
+    try {
+      const stream = await navigator.mediaDevices.getUserMedia({ video: true, audio: false });
+      streamRef.current = stream;
+      if (videoRef.current) videoRef.current.srcObject = stream;
+      setCapturing(true);
+      setPhoto(null);
+      setPreview(null);
+    } catch (err) {
+      alert('No se pudo acceder a la cámara: ' + err.message);
+    }
+  };
+
+  const stopCamera = () => {
+    setCapturing(false);
+    const stream = streamRef.current;
+    if (stream) {
+      stream.getTracks().forEach((t) => t.stop());
+      streamRef.current = null;
+    }
+    if (videoRef.current) videoRef.current.srcObject = null;
+  };
+
+  const capturePhoto = () => {
+    const video = videoRef.current;
+    const canvas = canvasRef.current;
+    if (!video || !canvas) return;
+    const width = video.videoWidth || 640;
+    const height = video.videoHeight || 480;
+    canvas.width = width;
+    canvas.height = height;
+    const ctx = canvas.getContext('2d');
+    ctx.drawImage(video, 0, 0, width, height);
+    const dataUrl = canvas.toDataURL('image/jpeg', 0.9);
+    setPhoto(dataUrl);
+    setPreview(dataUrl);
+    stopCamera();
+  };
+
+  useEffect(() => {
+    return () => {
+      stopCamera();
+    };
+  }, []);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -43,13 +98,13 @@ export default function Foto({ userData, solicitudData, onBack, onSuccess }) {
 
     try {
       const formData = new FormData();
-      // Convertir base64 a blob
-      const blob = await fetch(photo).then(r => r.blob());
-      formData.append('foto', blob);
-      
-      // Añadir todos los datos previos
-      Object.entries(solicitudData).forEach(([key, value]) => {
-        formData.append(key, value);
+      // photo es dataURL -> convertir a blob
+      const blob = await (await fetch(photo)).blob();
+      formData.append('foto', blob, 'foto.jpg');
+
+      // Añadir todos los datos previos (proteger si solicitudData es undefined)
+      Object.entries(solicitudData || {}).forEach(([key, value]) => {
+        formData.append(key, typeof value === 'object' ? JSON.stringify(value) : value);
       });
 
       const response = await fetch('http://localhost:3001/api/solicitud/confirmar', {
@@ -80,10 +135,16 @@ export default function Foto({ userData, solicitudData, onBack, onSuccess }) {
       </div>
 
       <div style={{ textAlign: 'center', margin: '20px 0' }}>
-        {!capturing && !photo && (
-          <button onClick={startCamera} className="primary-button">
-            Iniciar Cámara
-          </button>
+        {!capturing && !preview && (
+          <>
+            <button onClick={startCamera} className="primary-button" style={{ marginRight: 8 }}>
+              Iniciar Cámara
+            </button>
+            <label style={{ display: 'inline-block', marginTop: 8 }}>
+              <input type="file" accept="image/*" onChange={handlePhotoChange} style={{ display: 'none' }} />
+              <span className="secondary-button">Subir imagen</span>
+            </label>
+          </>
         )}
         
         {capturing && (
@@ -95,26 +156,25 @@ export default function Foto({ userData, solicitudData, onBack, onSuccess }) {
               style={{ width: '100%', maxWidth: '400px', marginBottom: '10px' }}
             />
             <br />
-            <button onClick={capturePhoto} className="primary-button">
+            <button onClick={capturePhoto} className="primary-button" style={{ marginRight: 8 }}>
               Tomar Foto
             </button>
+            <button onClick={stopCamera} className="secondary-button">Cancelar</button>
           </>
         )}
 
-        {photo && (
+        {preview && (
           <div>
             <img
-              src={photo}
+              src={preview}
               alt="Tu foto"
               style={{ width: '100%', maxWidth: '400px', marginBottom: '10px' }}
             />
             <br />
-            <button onClick={() => {
-              setPhoto(null);
-              startCamera();
-            }} className="secondary-button">
-              Tomar otra foto
+            <button onClick={() => { setPhoto(null); setPreview(null); }} className="secondary-button" style={{ marginRight: 8 }}>
+              Eliminar
             </button>
+            <button onClick={startCamera} className="primary-button">Tomar otra foto</button>
           </div>
         )}
 
