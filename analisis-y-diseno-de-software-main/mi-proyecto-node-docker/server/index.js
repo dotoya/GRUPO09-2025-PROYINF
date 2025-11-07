@@ -9,6 +9,7 @@ const bodyParser = require('body-parser');
 const pool = require('./db'); // 👈 corregido, exportas pool directamente, no { pool }
 const verifyRoutes = require('./api/verify/verify.routes');
 const authRoutes = require('./api/auth/auth.routes'); // 👈 agrega esto
+const simulacionRoutes = require('./api/simulacion/simulacion.routes');
 
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -25,6 +26,7 @@ app.use(bodyParser.urlencoded({ extended: true }));
 // ------------------------------
 app.use('/api/verify', verifyRoutes);
 app.use('/api/auth', authRoutes); // 👈 monta las rutas de registro/login
+app.use('/api/simulacion', simulacionRoutes);
 
 // ------------------------------
 //  Función opcional: crear tablas si no existen
