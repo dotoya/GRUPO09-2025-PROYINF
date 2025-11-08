@@ -9,9 +9,11 @@ export default function Foto({ userData, solicitudData, fotoCarnet, onBack, onSu
   const [preview, setPreview] = useState(null);
   const [capturing, setCapturing] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
+
   const videoRef = useRef(null);
   const canvasRef = useRef(null);
   const streamRef = useRef(null);
+  const fileInputRef = useRef(null); // <-- NUEVO: referencia al input file
 
   useEffect(() => {
     // cleanup al desmontar
@@ -19,12 +21,14 @@ export default function Foto({ userData, solicitudData, fotoCarnet, onBack, onSu
       stopCamera();
       if (preview && preview.startsWith('blob:')) URL.revokeObjectURL(preview);
     };
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [preview]);
 
   const startCamera = async () => {
     try {
-      const stream = await navigator.mediaDevices.getUserMedia({ video: { facingMode: 'user' }, audio: false });
+      const stream = await navigator.mediaDevices.getUserMedia({
+        video: { facingMode: 'user' },
+        audio: false,
+      });
       streamRef.current = stream;
       if (videoRef.current) {
         videoRef.current.srcObject = stream;
@@ -45,7 +49,7 @@ export default function Foto({ userData, solicitudData, fotoCarnet, onBack, onSu
         streamRef.current.getTracks().forEach((t) => t.stop());
         streamRef.current = null;
       }
-    } catch (e) {
+    } catch {
       /* ignore */
     } finally {
       setCapturing(false);
@@ -66,9 +70,7 @@ export default function Foto({ userData, solicitudData, fotoCarnet, onBack, onSu
     const f = e.target.files?.[0];
     if (!f) {
       setPhotoFile(null);
-      if (preview && preview.startsWith('blob:')) {
-        URL.revokeObjectURL(preview);
-      }
+      if (preview && preview.startsWith('blob:')) URL.revokeObjectURL(preview);
       setPreview(null);
       return;
     }
@@ -104,13 +106,11 @@ export default function Foto({ userData, solicitudData, fotoCarnet, onBack, onSu
     const file = dataURLtoFile(dataUrl, 'selfie.jpg');
     setPhotoFile(file);
     setPhotoDataURL(dataUrl);
-    // preview con dataURL (no es blob)
     setPreview(dataUrl);
     stopCamera();
   };
 
   const retake = () => {
-    // limpiar y volver a cámara
     if (preview && preview.startsWith('blob:')) URL.revokeObjectURL(preview);
     setPreview(null);
     setPhotoFile(null);
@@ -164,16 +164,32 @@ export default function Foto({ userData, solicitudData, fotoCarnet, onBack, onSu
         {!capturing && !preview && (
           <div style={{ display: 'flex', gap: 8, justifyContent: 'center' }}>
             <button type="button" onClick={startCamera}>Usar cámara</button>
-            <label style={{ display: 'inline-block' }}>
-              <input type="file" accept="image/*" onChange={handlePhotoChange} style={{ display: 'none' }} />
-              <button type="button">Subir imagen</button>
-            </label>
+            <button
+              type="button"
+              onClick={() => fileInputRef.current?.click()}
+            >
+              Subir imagen
+            </button>
+            {/* input oculto */}
+            <input
+              ref={fileInputRef}
+              type="file"
+              accept="image/*"
+              onChange={handlePhotoChange}
+              style={{ display: 'none' }}
+            />
           </div>
         )}
 
         {capturing && (
           <div>
-            <video ref={videoRef} style={{ maxWidth: '100%', borderRadius: 8 }} autoPlay muted playsInline />
+            <video
+              ref={videoRef}
+              style={{ maxWidth: '100%', borderRadius: 8 }}
+              autoPlay
+              muted
+              playsInline
+            />
             <div style={{ marginTop: 8 }}>
               <button type="button" onClick={capturePhoto}>Capturar</button>
               <button type="button" onClick={stopCamera}>Cancelar</button>
@@ -183,12 +199,13 @@ export default function Foto({ userData, solicitudData, fotoCarnet, onBack, onSu
 
         {preview && (
           <div style={{ marginTop: 12 }}>
-            <div>
-              <img src={preview} alt="Preview selfie" style={{ maxWidth: '320px', borderRadius: 8 }} />
-            </div>
+            <img
+              src={preview}
+              alt="Preview selfie"
+              style={{ maxWidth: '320px', borderRadius: 8 }}
+            />
             <div style={{ marginTop: 8, display: 'flex', gap: 8, justifyContent: 'center' }}>
               <button type="button" onClick={retake}>Volver a intentar</button>
-              <button type="button" onClick={() => { /* aceptar preview y mantener photoFile */ }}>Aceptar</button>
             </div>
           </div>
         )}
@@ -198,7 +215,11 @@ export default function Foto({ userData, solicitudData, fotoCarnet, onBack, onSu
 
       <form onSubmit={handleSubmit} style={{ textAlign: 'center' }}>
         {preview && (
-          <button type="submit" className="primary-button" disabled={isLoading}>
+          <button
+            type="submit"
+            className="primary-button"
+            disabled={isLoading}
+          >
             {isLoading ? 'Verificando con IA...' : 'Confirmar y Enviar Solicitud'}
           </button>
         )}
