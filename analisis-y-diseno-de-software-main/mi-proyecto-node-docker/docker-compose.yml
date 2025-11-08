@@ -16,8 +16,6 @@ services:
       - DB_NAME=mydb
 
 
-      # --- RELLENA ESTAS 4 LÍNEAS ---
-
     depends_on:
       - postgres_db
     volumes:

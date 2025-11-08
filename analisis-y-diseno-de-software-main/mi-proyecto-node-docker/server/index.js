@@ -1,61 +1,40 @@
-// ------------------------------
-//  Archivo: server/index.js
-// ------------------------------
+// Archivo: server/index.js
 
 require('dotenv').config();
 const express = require('express');
-const cors = require('cors');
-const bodyParser = require('body-parser');
-const pool = require('./db'); // 👈 corregido, exportas pool directamente, no { pool }
+const cors = require('cors'); // ✅ importación correcta
+
+// Importamos la función correcta desde el modelo
+const { createUserTable } = require('./api/auth/auth.model'); 
+
+// Importamos las rutas
 const verifyRoutes = require('./api/verify/verify.routes');
-const authRoutes = require('./api/auth/auth.routes'); // 👈 agrega esto
+const authRoutes = require('./api/auth/auth.routes');
 const simulacionRoutes = require('./api/simulacion/simulacion.routes');
 
 const app = express();
 const PORT = process.env.PORT || 3000;
 
-// ------------------------------
-//  Middlewares
-// ------------------------------
-app.use(cors());
-app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({ extended: true }));
+// --- Middlewares ---
+app.use(cors()); // ✅ ya funciona correctamente
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
 
-// ------------------------------
-//  Rutas
-// ------------------------------
+// --- Rutas ---
 app.use('/api/verify', verifyRoutes);
-app.use('/api/auth', authRoutes); // 👈 monta las rutas de registro/login
+app.use('/api/auth', authRoutes);
 app.use('/api/simulacion', simulacionRoutes);
 
-// ------------------------------
-//  Función opcional: crear tablas si no existen
-// ------------------------------
-async function createTables() {
-  const client = await pool.connect();
-  try {
-    await client.query(`
-      CREATE TABLE IF NOT EXISTS usuarios (
-        id SERIAL PRIMARY KEY,
-        nombre VARCHAR(100),
-        email VARCHAR(100),
-        fecha_registro TIMESTAMP DEFAULT NOW()
-      );
-    `);
-    console.log('✅ Tablas verificadas o creadas correctamente.');
-  } catch (error) {
-    console.error('❌ Error al crear tablas:', error);
-  } finally {
-    client.release();
-  }
-}
+app.get('/', (req, res) => {
+  res.send('¡API de autenticación, simulación y verificación funcionando!');
+});
 
-// ------------------------------
-//  Inicialización del servidor
-// ------------------------------
+// --- Iniciar Servidor ---
 async function startServer() {
   try {
-    await createTables(); // Crea las tablas si es necesario
+    // ✅ Llamamos a la función que crea la tabla de usuarios
+    await createUserTable();
+
     app.listen(PORT, () => {
       console.log(`🚀 Servidor corriendo en http://localhost:${PORT}`);
     });

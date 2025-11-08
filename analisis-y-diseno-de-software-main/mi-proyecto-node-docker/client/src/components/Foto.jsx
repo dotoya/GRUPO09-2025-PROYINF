@@ -1,70 +1,93 @@
+// Archivo: client/src/components/Foto.jsx
+
 import React, { useState, useRef, useEffect } from 'react';
 import './Login.css'; // reutilizamos estilos base
 
-export default function Foto({ userData, solicitudData, onBack, onSuccess }) {
-  const [photo, setPhoto] = useState(null); // dataURL or null
+export default function Foto({ userData, solicitudData, fotoCarnet, onBack, onSuccess }) {
+  const [photoDataURL, setPhotoDataURL] = useState(null);
+  const [photoFile, setPhotoFile] = useState(null);
   const [preview, setPreview] = useState(null);
   const [capturing, setCapturing] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
   const videoRef = useRef(null);
   const canvasRef = useRef(null);
   const streamRef = useRef(null);
 
-  const handlePhotoChange = (e) => {
-    const file = e.target.files?.[0];
-    if (!file) {
-      setPhoto(null);
-      setPreview(null);
-      return;
-    }
-
-    // Validar que sea una imagen
-    if (!file.type.startsWith('image/')) {
-      alert('Por favor selecciona un archivo de imagen.');
-      e.target.value = null;
-      return;
-    }
-
-    // Validar tamaño (máx 5MB)
-    const maxSize = 5 * 1024 * 1024;
-    if (file.size > maxSize) {
-      alert('La imagen es demasiado grande (máx 5MB).');
-      e.target.value = null;
-      return;
-    }
-
-    // Leer como dataURL para preview y envío consistente
-    const reader = new FileReader();
-    reader.onload = () => {
-      setPhoto(reader.result); // dataURL
-      setPreview(reader.result);
-      // Si la cámara estaba activa, detenerla
+  useEffect(() => {
+    // cleanup al desmontar
+    return () => {
       stopCamera();
+      if (preview && preview.startsWith('blob:')) URL.revokeObjectURL(preview);
     };
-    reader.readAsDataURL(file);
-  };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
-  // start/stop/capture camera
   const startCamera = async () => {
     try {
-      const stream = await navigator.mediaDevices.getUserMedia({ video: true, audio: false });
+      const stream = await navigator.mediaDevices.getUserMedia({ video: { facingMode: 'user' }, audio: false });
       streamRef.current = stream;
-      if (videoRef.current) videoRef.current.srcObject = stream;
+      if (videoRef.current) {
+        videoRef.current.srcObject = stream;
+        await videoRef.current.play();
+      }
       setCapturing(true);
-      setPhoto(null);
       setPreview(null);
+      setPhotoFile(null);
+      setPhotoDataURL(null);
     } catch (err) {
       alert('No se pudo acceder a la cámara: ' + err.message);
     }
   };
 
   const stopCamera = () => {
-    setCapturing(false);
-    const stream = streamRef.current;
-    if (stream) {
-      stream.getTracks().forEach((t) => t.stop());
-      streamRef.current = null;
+    try {
+      if (streamRef.current) {
+        streamRef.current.getTracks().forEach((t) => t.stop());
+        streamRef.current = null;
+      }
+    } catch (e) {
+      /* ignore */
+    } finally {
+      setCapturing(false);
     }
-    if (videoRef.current) videoRef.current.srcObject = null;
+  };
+
+  const dataURLtoFile = (dataurl, filename) => {
+    const arr = dataurl.split(',');
+    const mime = arr[0].match(/:(.*?);/)[1];
+    const bstr = atob(arr[1]);
+    let n = bstr.length;
+    const u8arr = new Uint8Array(n);
+    while (n--) u8arr[n] = bstr.charCodeAt(n);
+    return new File([u8arr], filename, { type: mime });
+  };
+
+  const handlePhotoChange = (e) => {
+    const f = e.target.files?.[0];
+    if (!f) {
+      setPhotoFile(null);
+      if (preview && preview.startsWith('blob:')) {
+        URL.revokeObjectURL(preview);
+      }
+      setPreview(null);
+      return;
+    }
+    if (!f.type.startsWith('image/')) {
+      alert('Por favor selecciona un archivo de imagen.');
+      e.target.value = null;
+      return;
+    }
+    const maxSize = 5 * 1024 * 1024;
+    if (f.size > maxSize) {
+      alert('La imagen es demasiado grande (máx 5MB).');
+      e.target.value = null;
+      return;
+    }
+    setPhotoFile(f);
+    if (preview && preview.startsWith('blob:')) URL.revokeObjectURL(preview);
+    setPreview(URL.createObjectURL(f));
+    setPhotoDataURL(null);
+    stopCamera();
   };
 
   const capturePhoto = () => {
@@ -78,113 +101,105 @@ export default function Foto({ userData, solicitudData, onBack, onSuccess }) {
     const ctx = canvas.getContext('2d');
     ctx.drawImage(video, 0, 0, width, height);
     const dataUrl = canvas.toDataURL('image/jpeg', 0.9);
-    setPhoto(dataUrl);
+    const file = dataURLtoFile(dataUrl, 'selfie.jpg');
+    setPhotoFile(file);
+    setPhotoDataURL(dataUrl);
+    // preview con dataURL (no es blob)
     setPreview(dataUrl);
     stopCamera();
   };
 
-  useEffect(() => {
-    return () => {
-      stopCamera();
-    };
-  }, []);
+  const retake = () => {
+    // limpiar y volver a cámara
+    if (preview && preview.startsWith('blob:')) URL.revokeObjectURL(preview);
+    setPreview(null);
+    setPhotoFile(null);
+    setPhotoDataURL(null);
+    startCamera();
+  };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    if (!photo) {
-      alert('Por favor, toma una foto primero');
+    if (!photoFile) {
+      alert('Por favor, toma o sube una selfie.');
+      return;
+    }
+    if (!fotoCarnet) {
+      alert('Error: falta la foto del carnet. Vuelve al paso anterior.');
       return;
     }
 
+    setIsLoading(true);
     try {
       const formData = new FormData();
-      // photo es dataURL -> convertir a blob
-      const blob = await (await fetch(photo)).blob();
-      formData.append('foto', blob, 'foto.jpg');
+      formData.append('fotoCarnet', fotoCarnet);
+      formData.append('fotoSelfie', photoFile);
 
-      // Añadir todos los datos previos (proteger si solicitudData es undefined)
-      Object.entries(solicitudData || {}).forEach(([key, value]) => {
-        formData.append(key, typeof value === 'object' ? JSON.stringify(value) : value);
-      });
-
-      const response = await fetch('http://localhost:3001/api/solicitud/confirmar', {
+      const response = await fetch('http://localhost:3001/api/verify/verificar-rostro', {
         method: 'POST',
         body: formData,
       });
 
-      if (!response.ok) {
-        throw new Error('Error al enviar la confirmación');
-      }
+      const data = await response.json();
+      if (!response.ok) throw new Error(data.message || 'Error en la verificación facial');
 
-      onSuccess && onSuccess();
+      if (data.isIdentical || data.isIdentical === true) {
+        if (typeof onSuccess === 'function') onSuccess();
+      } else {
+        alert(`Verificación fallida: Las caras no coinciden. Confianza: ${Math.round((data.confidence || 0) * 100)}%`);
+      }
     } catch (error) {
-      alert('Error al enviar la confirmación: ' + error.message);
+      alert('Error al enviar la verificación: ' + (error.message || error));
+    } finally {
+      setIsLoading(false);
     }
   };
 
   return (
     <div className="auth-card">
       <button className="back-button" onClick={onBack}>&larr; Volver</button>
-      <h2>Confirmar tu Identidad</h2>
-      
-      <div style={{ marginBottom: '20px' }}>
-        <h3>Datos de la solicitud:</h3>
-        <p><strong>Nombre:</strong> {solicitudData?.nombre}</p>
-        <p><strong>RUT:</strong> {solicitudData?.rut}</p>
-        <p><strong>Email:</strong> {solicitudData?.email}</p>
-      </div>
+      <h2>Confirmar tu Identidad - Paso 2/2</h2>
 
-      <div style={{ textAlign: 'center', margin: '20px 0' }}>
+      <div style={{ textAlign: 'center', margin: '16px 0' }}>
         {!capturing && !preview && (
-          <>
-            <button onClick={startCamera} className="primary-button" style={{ marginRight: 8 }}>
-              Iniciar Cámara
-            </button>
-            <label style={{ display: 'inline-block', marginTop: 8 }}>
+          <div style={{ display: 'flex', gap: 8, justifyContent: 'center' }}>
+            <button type="button" onClick={startCamera}>Usar cámara</button>
+            <label style={{ display: 'inline-block' }}>
               <input type="file" accept="image/*" onChange={handlePhotoChange} style={{ display: 'none' }} />
-              <span className="secondary-button">Subir imagen</span>
+              <button type="button">Subir imagen</button>
             </label>
-          </>
+          </div>
         )}
-        
+
         {capturing && (
-          <>
-            <video
-              ref={videoRef}
-              autoPlay
-              playsInline
-              style={{ width: '100%', maxWidth: '400px', marginBottom: '10px' }}
-            />
-            <br />
-            <button onClick={capturePhoto} className="primary-button" style={{ marginRight: 8 }}>
-              Tomar Foto
-            </button>
-            <button onClick={stopCamera} className="secondary-button">Cancelar</button>
-          </>
+          <div>
+            <video ref={videoRef} style={{ maxWidth: '100%', borderRadius: 8 }} autoPlay muted playsInline />
+            <div style={{ marginTop: 8 }}>
+              <button type="button" onClick={capturePhoto}>Capturar</button>
+              <button type="button" onClick={stopCamera}>Cancelar</button>
+            </div>
+          </div>
         )}
 
         {preview && (
-          <div>
-            <img
-              src={preview}
-              alt="Tu foto"
-              style={{ width: '100%', maxWidth: '400px', marginBottom: '10px' }}
-            />
-            <br />
-            <button onClick={() => { setPhoto(null); setPreview(null); }} className="secondary-button" style={{ marginRight: 8 }}>
-              Eliminar
-            </button>
-            <button onClick={startCamera} className="primary-button">Tomar otra foto</button>
+          <div style={{ marginTop: 12 }}>
+            <div>
+              <img src={preview} alt="Preview selfie" style={{ maxWidth: '320px', borderRadius: 8 }} />
+            </div>
+            <div style={{ marginTop: 8, display: 'flex', gap: 8, justifyContent: 'center' }}>
+              <button type="button" onClick={retake}>Volver a intentar</button>
+              <button type="button" onClick={() => { /* aceptar preview y mantener photoFile */ }}>Aceptar</button>
+            </div>
           </div>
         )}
 
         <canvas ref={canvasRef} style={{ display: 'none' }} />
       </div>
 
-      <form onSubmit={handleSubmit}>
-        {photo && (
-          <button type="submit" className="primary-button">
-            Confirmar y Enviar Solicitud
+      <form onSubmit={handleSubmit} style={{ textAlign: 'center' }}>
+        {preview && (
+          <button type="submit" className="primary-button" disabled={isLoading}>
+            {isLoading ? 'Verificando con IA...' : 'Confirmar y Enviar Solicitud'}
           </button>
         )}
       </form>
