@@ -144,10 +144,10 @@ function App() {
   // --- VISTA HOME ---
   return (
     <div className="App bank-home" style={{ textAlign: 'center', marginTop: '60px' }}>
-      <h1>Banco Sansano 🏦</h1>
-      <p>Bienvenido a nuestro sistema bancario.</p>
+      <h1>Banco La Polar 🏦</h1>
+      <p>Te apoyamos en las buenas y en las malas.</p>
       <div style={{ marginTop: '20px' }}>
-        <button onClick={() => setView('login')}>Iniciar Sesión</button>
+        <button onClick={() => setView('login')}>Iniciar Sesión y empezar simulación</button>
         <button onClick={() => setView('register')} style={{ marginLeft: '10px' }}>
           Registrarse
         </button>
