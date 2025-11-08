@@ -15,7 +15,9 @@ services:
       - DB_PASSWORD=password
       - DB_NAME=mydb
 
+      # ---rellenar con estas cuatro lineas ---
 
+      
     depends_on:
       - postgres_db
     volumes:
