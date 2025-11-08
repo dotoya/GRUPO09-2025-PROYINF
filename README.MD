@@ -63,6 +63,14 @@ Para levantar el proyecto, sigue estos pasos:
 
 La documentación completa de la API se encuentra en la carpeta `api` del servidor. Puedes encontrar toda la información detallada sobre los endpoints, modelos y funcionalidades en el archivo `README.md` dentro de esa carpeta.
 
+## Sistema de seguridad
+
+El sistema de identificación facial, que compara la foto del carnet con la imagen del usuario, funciona parcialmente. Su uso completo depende de la autorización de Microsoft para habilitar todas las funciones del servicio.
+
+
+
+
+
 
 
 
