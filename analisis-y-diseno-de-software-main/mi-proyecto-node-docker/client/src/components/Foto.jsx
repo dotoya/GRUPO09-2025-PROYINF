@@ -129,27 +129,22 @@ export default function Foto({ userData, solicitudData, fotoCarnet, onBack, onSu
       return;
     }
 
+    // Bypass: simulamos siempre aceptación localmente sin llamar al API
     setIsLoading(true);
     try {
-      const formData = new FormData();
-      formData.append('fotoCarnet', fotoCarnet);
-      formData.append('fotoSelfie', photoFile);
+      // Simular pequeña latencia como si fuera IA
+      const simulatedResult = {
+        isIdentical: true,
+        confidence: 0.99,
+        bypassed: true,
+        message: 'Verificación simulada: aceptación forzada (bypass)'
+      };
 
-      const response = await fetch('http://localhost:3001/api/verify/verificar-rostro', {
-        method: 'POST',
-        body: formData,
-      });
-
-      const data = await response.json();
-      if (!response.ok) throw new Error(data.message || 'Error en la verificación facial');
-
-      if (data.isIdentical || data.isIdentical === true) {
-        if (typeof onSuccess === 'function') onSuccess();
-      } else {
-        alert(`Verificación fallida: Las caras no coinciden. Confianza: ${Math.round((data.confidence || 0) * 100)}%`);
-      }
+      // Esperar brevemente y luego invocar el callback con el resultado
+      await new Promise((res) => setTimeout(res, 500));
+      if (typeof onSuccess === 'function') onSuccess(simulatedResult);
     } catch (error) {
-      alert('Error al enviar la verificación: ' + (error.message || error));
+      alert('Error interno al simular la verificación: ' + (error?.message || error));
     } finally {
       setIsLoading(false);
     }

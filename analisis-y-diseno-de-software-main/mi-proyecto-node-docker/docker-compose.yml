@@ -17,7 +17,6 @@ services:
 
       # ---rellenar con estas cuatro lineas ---
 
-      
     depends_on:
       - postgres_db
     volumes:

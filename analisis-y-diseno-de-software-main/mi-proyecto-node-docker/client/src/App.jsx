@@ -7,6 +7,7 @@ import ClientPortal from './components/ClientPortal';
 import Simulacion from './components/Simulacion';
 import Solicitud from './components/Solicitud';
 import Foto from './components/Foto';
+import DetallesSimulacion from './components/DetallesSimulacion';
 
 function App() {
   const [view, setView] = useState('home');
@@ -14,6 +15,7 @@ function App() {
   const [simulacionData, setSimulacionData] = useState(null);
   const [solicitudData, setSolicitudData] = useState(null);
   const [fotoCarnetFile, setFotoCarnetFile] = useState(null);
+  const [verificacionResult, setVerificacionResult] = useState(null);
 
   useEffect(() => {
     console.log(`Vista actual: ${view}`);
@@ -116,12 +118,10 @@ function App() {
         solicitudData={solicitudData}
         fotoCarnet={fotoCarnetFile}
         onBack={() => setView('solicitud')}
-        onSuccess={() => {
-          alert('¡Verificación Exitosa! Solicitud enviada.');
-          setSimulacionData(null);
-          setSolicitudData(null);
-          setFotoCarnetFile(null);
-          setView('portal');
+        onSuccess={(result) => {
+          // Guardamos el resultado y navegamos a la vista de detalles
+          setVerificacionResult(result || null);
+          setView('detalles');
         }}
       />
     );
@@ -137,6 +137,28 @@ function App() {
           setUserData(null);
           setView('home');
         }}
+      />
+    );
+  }
+
+  // --- VISTA DETALLES DE LA SIMULACIÓN / RESULTADO ---
+  if (view === 'detalles') {
+    // si faltan datos mínimos, volver a portal o simulacion
+    return (
+      <DetallesSimulacion
+        userData={userData}
+        simulacionData={simulacionData}
+        solicitudData={solicitudData}
+        verificacionResult={verificacionResult}
+        onBackToPortal={() => {
+          // limpiamos los datos de la solicitud después de mostrar
+          setSimulacionData(null);
+          setSolicitudData(null);
+          setFotoCarnetFile(null);
+          setVerificacionResult(null);
+          setView('portal');
+        }}
+        onBackToHome={() => setView('home')}
       />
     );
   }
