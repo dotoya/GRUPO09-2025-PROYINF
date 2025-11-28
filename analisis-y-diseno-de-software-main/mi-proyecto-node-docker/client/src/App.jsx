@@ -26,7 +26,8 @@ function App() {
     setView('simulacion');
   };
 
-  // --- VISTA LOGIN ---
+  // --- VISTAS DEL FLUJO DE CRÉDITO ---
+  
   if (view === 'login') {
     return (
       <Login
@@ -36,7 +37,6 @@ function App() {
     );
   }
 
-  // --- VISTA REGISTER ---
   if (view === 'register') {
     return (
       <Register
@@ -46,15 +46,10 @@ function App() {
     );
   }
 
-  // --- VISTA SIMULACIÓN ---
   if (view === 'simulacion') {
     if (!userData) {
-      return (
-        <Login
-          onSuccess={handleAuthSuccess}
-          onCreateAccount={() => setView('register')}
-        />
-      );
+      // Redirigir si no hay datos de usuario
+      return <div className="bank-home">Redirigiendo a Login...</div>;
     }
     return (
       <Simulacion
@@ -68,19 +63,10 @@ function App() {
     );
   }
 
-  // --- VISTA SOLICITUD ---
   if (view === 'solicitud') {
     if (!simulacionData || !userData) {
-      return (
-        <Simulacion
-          userData={userData}
-          onBack={() => setView('home')}
-          onRequestSolicitud={(simData) => {
-            setSimulacionData(simData);
-            setView('solicitud');
-          }}
-        />
-      );
+      // Redirigir si faltan datos
+      return <div className="bank-home">Redirigiendo a Simulación...</div>;
     }
     return (
       <Solicitud
@@ -96,21 +82,10 @@ function App() {
     );
   }
 
-  // --- VISTA FOTO ---
   if (view === 'foto') {
     if (!solicitudData || !userData || !fotoCarnetFile) {
-      return (
-        <Solicitud
-          userData={userData}
-          simulacionData={simulacionData}
-          onBack={() => setView('simulacion')}
-          onConfirmar={(formData, fotoCarnet) => {
-            setSolicitudData(formData);
-            setFotoCarnetFile(fotoCarnet);
-            setView('foto');
-          }}
-        />
-      );
+      // Redirigir si faltan datos
+      return <div className="bank-home">Redirigiendo a Solicitud...</div>;
     }
     return (
       <Foto
@@ -119,7 +94,6 @@ function App() {
         fotoCarnet={fotoCarnetFile}
         onBack={() => setView('solicitud')}
         onSuccess={(result) => {
-          // Guardamos el resultado y navegamos a la vista de detalles
           setVerificacionResult(result || null);
           setView('detalles');
         }}
@@ -127,7 +101,6 @@ function App() {
     );
   }
 
-  // --- VISTA PORTAL DEL CLIENTE ---
   if (view === 'portal') {
     return (
       <ClientPortal
@@ -141,9 +114,7 @@ function App() {
     );
   }
 
-  // --- VISTA DETALLES DE LA SIMULACIÓN / RESULTADO ---
   if (view === 'detalles') {
-    // si faltan datos mínimos, volver a portal o simulacion
     return (
       <DetallesSimulacion
         userData={userData}
@@ -151,7 +122,6 @@ function App() {
         solicitudData={solicitudData}
         verificacionResult={verificacionResult}
         onBackToPortal={() => {
-          // limpiamos los datos de la solicitud después de mostrar
           setSimulacionData(null);
           setSolicitudData(null);
           setFotoCarnetFile(null);
@@ -163,17 +133,62 @@ function App() {
     );
   }
 
-  // --- VISTA HOME ---
+  // --- VISTA HOME ADAPTADA (Página Principal) ---
   return (
-    <div className="App bank-home" style={{ textAlign: 'center', marginTop: '60px' }}>
-      <h1>Banco La Polar 🏦</h1>
-      <p>Te apoyamos en las buenas y en las malas.</p>
-      <div style={{ marginTop: '20px' }}>
-        <button onClick={() => setView('login')}>Iniciar Sesión y empezar simulación</button>
-        <button onClick={() => setView('register')} style={{ marginLeft: '10px' }}>
-          Registrarse
-        </button>
+    <div className="bank-home">
+      
+      {/* HEADER */}
+      <header className="home-header">
+        <div className="home-header-logo">
+            Banco La Polar 🏦
+        </div>
+        <nav className="home-header-nav">
+            {userData ? (
+                // Botón Portal como secundario (contorno)
+                <button className="cta secondary" onClick={() => setView('portal')} style={{ marginRight: '10px' }}>
+                    Ir a mi Portal
+                </button>
+            ) : (
+                // Botón Iniciar Sesión como secundario (contorno)
+                <button className="cta secondary" onClick={() => setView('login')} style={{ marginRight: '10px' }}>
+                    Iniciar Sesión
+                </button>
+            )}
+            
+            {/* Botón Registrarse como primario (relleno) */}
+            <button className="cta primary" onClick={() => setView('register')}>
+                Registrarse
+            </button>
+        </nav>
+      </header>
+      
+      {/* HERO SECTION */}
+      <div className="hero">
+        <div className="hero-content">
+            <h1 style={{ fontSize: '2.5rem', marginTop: '0' }}>Te apoyamos en las buenas y en las malas</h1>
+            <p style={{ fontSize: '1.2rem' }}>
+              Simula tu crédito en segundos y obtén la aprobación instantánea que necesitas.
+            </p>
+            
+            <div className="cta" style={{ marginTop: '2rem' }}>
+              <button className="primary" onClick={() => setView('login')}>
+                Simular Crédito y Solicitar Ahora
+              </button>
+            </div>
+            <p className="hero-tagline">
+              Sin compromiso • 100% seguro • Respuesta inmediata
+            </p>
+        </div>
       </div>
+
+      {/* FOOTER */}
+      <footer className="home-footer">
+        <p>© 2025 Banco La Polar. Todos los derechos reservados.</p>
+        <p>
+          <button className="link-button" onClick={() => setView('home')}>Términos y Condiciones</button>
+        </p>
+      </footer>
+      
     </div>
   );
 }
