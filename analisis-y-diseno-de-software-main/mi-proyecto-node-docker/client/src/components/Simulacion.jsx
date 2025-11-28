@@ -83,7 +83,7 @@ export default function Simulador({ userData, onBack, onRequestSolicitud }) {
             Cantidad de cuotas
             <input name="cuotas" type="number" placeholder="12" value={formData.cuotas} onChange={handleChange} required />
           </label>
-          <button type="submit" disabled={isLoading}>
+          <button type="submit" className="primary-button" disabled={isLoading}>
             {isLoading ? 'Calculando...' : 'Iniciar simulación'}
           </button>
         </form>
@@ -92,16 +92,17 @@ export default function Simulador({ userData, onBack, onRequestSolicitud }) {
         {results && (
           <div className="sim-card results-card">
             <h3>Resultado de tu Simulación</h3>
-            <p><strong>Valor Cuota Mensual:</strong> ${results.valorCuota?.toLocaleString('es-CL')}</p>
-            <p><strong>Costo Total del Crédito:</strong> ${results.costoTotal?.toLocaleString('es-CL')}</p>
-            <p><strong>Tasa de Interés Mensual Aplicada:</strong> {results.tasaMensual}%</p>
-            <p><strong>Carga Anual Equivalente (CAE):</strong> {results.cae}%</p>
+            <div className="card-section">
+              <div className="field-row"><div className="label">Valor cuota mensual</div><div className="value">${results.valorCuota?.toLocaleString('es-CL')}</div></div>
+              <div className="field-row"><div className="label">Costo Total del Crédito</div><div className="value">${results.costoTotal?.toLocaleString('es-CL')}</div></div>
+              <div className="field-row"><div className="label">Tasa de Interés Mensual Aplicada</div><div className="value">{results.tasaMensual}%</div></div>
+              <div className="field-row"><div className="label">Carga Anual Equivalente (CAE)</div><div className="value">{results.cae}%</div></div>
+            </div>
             <small>Este es un cálculo referencial y no constituye una oferta.</small>
-            <div style={{ marginTop: '12px' }}>
-              {/* Botón para redirigir a iniciar sesión y poder solicitar el crédito */}
+            <div className="card-actions center" style={{ marginTop: '12px' }}>
               <button
                 type="button"
-                className="login-redirect-button"
+                className="primary-button"
                 onClick={redirectToSolicitud}
               >
                 Solicitar crédito

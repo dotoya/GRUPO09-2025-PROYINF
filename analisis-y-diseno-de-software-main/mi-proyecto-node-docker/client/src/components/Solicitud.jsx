@@ -129,9 +129,9 @@ export default function Solicitud({ userData, simulacionData, onBack, onConfirma
 
         {error && <div className="form-error">{error}</div>}
 
-        <div style={{ display: 'flex', gap: 8, marginTop: 12 }}>
+        <div className="card-actions" style={{ marginTop: 12 }}>
           <button type="button" onClick={onBack}>Volver</button>
-          <button type="submit" disabled={sending}>{sending ? 'Verificando...' : 'Confirmar Solicitud'}</button>
+          <button type="submit" className="primary-button" disabled={sending}>{sending ? 'Verificando...' : 'Confirmar Solicitud'}</button>
         </div>
       </form>
     </div>

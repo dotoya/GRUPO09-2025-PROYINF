@@ -46,7 +46,7 @@ export default function Login({ onSuccess, onCreateAccount }) {
           onChange={(e) => setLoginPassword(e.target.value)}
           required
         />
-        <button type="submit">Entrar</button>
+        <button type="submit" className="primary-button">Entrar</button>
       </form>
       <p style={{ marginTop: '0.75rem' }}>
         ¿No tienes cuenta? <button className="link-button" onClick={onCreateAccount}>crear cuenta</button>

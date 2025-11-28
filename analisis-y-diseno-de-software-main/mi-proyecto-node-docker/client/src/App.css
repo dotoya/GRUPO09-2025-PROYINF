@@ -99,6 +99,12 @@
   background: linear-gradient(180deg,#ffffff,#fbfdff);
   box-shadow: 0 8px 30px rgba(11,42,74,0.06);
 }
+
+/* Variant for wider cards (details, results) */
+.auth-card.large {
+  max-width: 920px;
+  padding: 1.5rem 1.5rem;
+}
 .auth-form {
   display: flex;
   flex-direction: column;
@@ -113,10 +119,23 @@
   padding: 0.6rem 0.8rem;
   border-radius: 6px;
   border: none;
-  background: #0b69ff;
+  background: var(--primary);
   color: white;
   cursor: pointer;
 }
+
+/* Primary button used across the app */
+.primary-button {
+  background: var(--primary);
+  color: white;
+  border: none;
+  padding: 0.6rem 1rem;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: 700;
+  box-shadow: 0 6px 18px rgba(11,42,74,0.08);
+}
+.primary-button:hover { background: var(--primary-700); transform: translateY(-2px) }
 
 .back-button {
   margin: 1rem;
@@ -155,6 +174,28 @@
   max-width:520px;
   width:100%
 }
+
+/* Layout helpers for cards and fields to maintain alignment */
+.card-section {
+  display: block;
+  gap: 8px;
+}
+
+.field-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 8px 6px;
+  border-bottom: 1px dashed rgba(11,42,74,0.06);
+}
+.field-row:last-child { border-bottom: none }
+.field-row .label { color: #2b4760; font-weight: 600; }
+.field-row .value { color: #243b52; text-align: right; }
+
+.card-actions { display:flex; gap:12px; justify-content:flex-end; margin-top:12px }
+.card-actions.center { justify-content: center }
+
+.auth-card h3, .sim-card h3 { margin-bottom: 8px; color: var(--primary) }
 .sim-card h2{
   margin:0 0 12px
 }
@@ -172,7 +213,7 @@
 }
 .sim-card button{
   margin-top:12px;
-  background:#0f172a;
+  background:var(--primary);
   color:#fff;
   padding:10px 14px;
   border-radius:8px;
@@ -282,3 +323,7 @@
   border-color: #0050cc;
   color: #0050cc;
 }
+
+/* Alias global para botones primarios usados en distintos componentes */
+.primary { background: var(--primary); color: white; padding: 0.6rem 1rem; border-radius: 8px; border: none; font-weight:700 }
+.primary:hover { background: var(--primary-700); transform: translateY(-2px) }

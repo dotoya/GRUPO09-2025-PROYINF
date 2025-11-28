@@ -69,7 +69,7 @@ export default function Register({ onSuccess }) {
           onChange={(e) => setRegisterBirthdate(e.target.value)}
           required
         />
-        <button type="submit">Crear cuenta</button>
+        <button type="submit" className="primary-button">Crear cuenta</button>
       </form>
     </div>
   );
