@@ -8,6 +8,11 @@ const multer = require('multer');
 const storage = multer.memoryStorage(); 
 const upload = multer({ storage: storage });
 
+// GET
+router.get('/', (req, res) => {
+  res.json({ message: "Endpoint de verificación activo. Usa POST en /escanear-carnet o /verificar-rostro" });
+});
+
 // Ruta para escanear el carnet (recibe 1 archivo llamado 'fotoCarnet')
 router.post('/escanear-carnet', upload.single('fotoCarnet'), controller.extraerDatosCarnet);
 
