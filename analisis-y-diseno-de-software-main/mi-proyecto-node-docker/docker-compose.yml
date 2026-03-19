@@ -16,16 +16,35 @@ services:
       - DB_NAME=mydb
 
       # ---rellenar con estas cuatro lineas ---
-
     depends_on:
-      - postgres_db
+      postgres_db:
+          condition: service_healthy
     volumes:
       - ./server:/app
       - /app/node_modules
 
+      # Se añade frontend React/Vite como servicio docker
+
+  frontend:
+    build:
+      context: ./client
+      dockerfile: Dockerfile
+    ports:
+      - "5173:5173" # Puerto típico de Vite/React
+    volumes:
+      - ./client:/app
+      - /app/node_modules
+    environment:
+      - VITE_API_URL=http://localhost:3001
+
   # Servicio de la Base de Datos
   postgres_db:
     image: postgres:15-alpine
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U user -d mydb"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
     environment:
       - POSTGRES_USER=user
       - POSTGRES_PASSWORD=password
@@ -34,6 +53,8 @@ services:
       - postgres_data:/var/lib/postgresql/data
     ports:
       - "5432:5432"
+
+    
 
 volumes:
   postgres_data:
