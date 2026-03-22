@@ -38,28 +38,16 @@ Esto es imprescindible para que el backend (base de datos y servidor) pueda leva
 
 Para levantar el proyecto, sigue estos pasos:
 
-1.  **Levantar el Backend (Base de Datos y Servidor):**
-    * Abre una terminal en la carpeta raíz `mi-proyecto-node-docker`.
+1.  **Levantamiento de Docker (Frontend (dev hotswap), Backend y Base de Datos):**
+    * Abre un terminal en la dirección del proyecto y navega hacia la carpeta 'mi-proyecto-node-docker'.
+         ```bash
+        cd analisis-y-diseno-de-software-main/mi-proyecto-node-docker
+         ```
     * Ejecuta el siguiente comando y déjalo corriendo:
         ```bash
         sudo docker-compose up --build
         ```
-
-2.  **Levantar el Frontend (Cliente):**
-    * Abre una **segunda terminal** (sin cerrar la primera).
-    * Ingresa a la carpeta `client`.
-    * Ejecuta los siguientes comandos:
-        ```bash
-        # Instala las dependencias (solo la primera vez)
-        npm install
-        
-        # Inicia el servidor de desarrollo
-        npm run dev
-        ```
-
-3.  **Acceder a la Aplicación:**
-    * Luego de ejecutar `npm run dev`, la terminal te mostrará un enlace local (usualmente algo como `http://localhost:5173`).
-    * Abre ese enlace en tu navegador para ver la página web.
+   * Listo, el proyecto deberia estar levantado.
 
 ## Sistema de seguridad
 
