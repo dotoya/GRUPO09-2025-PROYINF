@@ -19,35 +19,40 @@ Puede acceder a la Wiki mediante el siguiente [enlace](https://github.com/dotoya
 * [Test Hito3](https://youtu.be/VIYJMNx5HbE)
 * [Test Hito5](https://youtu.be/Rxpma8kiMzI)
 
-## DOCKER
+## ⚠️ Variables de Entorno (Antes de usar Docker)
 
-El archivo `docker-compose.yml` no se subió al repositorio porque contenía claves de Azure y violaba las políticas de seguridad de GitHub. Para permitir que el proyecto se ejecute, hemos incluido un PDF llamado `Codigo_copia.pdf` en la raíz del repositorio que contiene el código completo que debe pegarse en `docker-compose.yml`.
+Para manejar datos sensibles y credenciales (como la comprobación de identidad de Azure), el proyecto utiliza un archivo `.env`.
 
-Instrucciones breves:
-- Abra la carpeta raíz `mi-proyecto-node-docker`.
-- Abra (o cree) el archivo `docker-compose.yml`.
-- Localice la sección marcada exactamente con:
-   --- RELLENA ESTAS 4 LÍNEAS ---
-- Copie el contenido desde `Codigo_copia.pdf` y péguelo en lugar de esas 4 líneas.
-- Guarde `docker-compose.yml`.
- 
-Esto es imprescindible para que el backend (base de datos y servidor) pueda levantarse correctamente.
+1. Renombra el archivo `.env.example` a `.env` en la raíz del proyecto.
+2. Abre el nuevo `.env` y configura la cuenta de administrador a tu gusto.
+3. Ingresa las llaves de la API de Azure. *(Nota: Si estás testeando el proyecto, puedes usar las credenciales de prueba que dejamos en el archivo `Codigo_copia.pdf`).*
+
+Una vez configurado, estás listo para levantar el proyecto.
 
 
-## Indicaciones para levantar el proyecto
+## Levantamiento del Proyecto
 
-Para levantar el proyecto, sigue estos pasos:
+> **Importante:** Asegúrate de haber configurado las **Variables de Entorno** (paso anterior) antes de continuar. De lo contrario, los contenedores fallarán al iniciar.
 
-1.  **Levantamiento de Docker (Frontend (dev hotswap), Backend y Base de Datos):**
-    * Abre un terminal en la dirección del proyecto y navega hacia la carpeta 'mi-proyecto-node-docker'.
-         ```bash
-        cd analisis-y-diseno-de-software-main/mi-proyecto-node-docker
-         ```
-    * Ejecuta el siguiente comando y déjalo corriendo:
+Para iniciar los servicios (Frontend con *hot-reload*, Backend y Base de Datos), sigue estos pasos:
+
+1. **Navega a la carpeta del proyecto:**
+   Abre tu terminal y dirígete al directorio donde se encuentra el archivo `docker-compose.yml`:
+   ```bash
+cd analisis-y-diseno-de-software-main/mi-proyecto-node-docker
+   ```
+2. **Levantamiento de Docker-Compose**
+Ejecuta el siguiente comando y déjalo corriendo:
         ```bash
         sudo docker-compose up --build
         ```
-   * Listo, el proyecto deberia estar levantado.
+
+### Accesos Rápidos
+Una vez que Docker esté corriendo, puedes acceder a:
+- **Frontend:** [http://localhost:5173](http://localhost:5173)
+- **API Backend:** [http://localhost:3001](http://localhost:3001)
+- **Base de Datos:** Puerto `5432` (User/Pass definidos en tu `.env`)
+
 
 ## Sistema de seguridad
 
