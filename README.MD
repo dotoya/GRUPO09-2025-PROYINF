@@ -1,13 +1,13 @@
-# Grupo 09
+# Grupo 03
 
-Este es el repositorio del *Grupo 09*, cuyos integrantes son:
+Este es el repositorio del *Grupo 03*, cuyos integrantes son:
 
 * Nicolas Ignacio Vargas Ezquerra - 202373123-4
 * Daniel Andres San Martin Diaz - 202373106-4
 * Matias Gomez - 202373033-5
 * Salvador Esteban Molina Romero - 202373581-7
 * Fabian San Martin - 202304650-7
-* **Tutor**: Matias Andree Barrera Vergara
+* **Tutor**: Miguel Huerta
 
 ## Wiki
 
@@ -32,7 +32,7 @@ Una vez configurado, estás listo para levantar el proyecto.
 
 ## Levantamiento del Proyecto
 
-> **Importante:** Asegúrate de haber configurado las **Variables de Entorno** (paso anterior) antes de continuar. De lo contrario, los contenedores fallarán al iniciar.
+**Importante:** Asegúrate de haber configurado las **Variables de Entorno** (paso anterior) antes de continuar. De lo contrario, los contenedores fallarán al iniciar.
 
 Para iniciar los servicios (Frontend con *hot-reload*, Backend y Base de Datos), sigue estos pasos:
 
