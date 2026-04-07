@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import './Login.css';
+import '../App.css';
 
 export default function DetallesSimulacion({ userData, simulacionData, solicitudData, verificacionResult, onBackToPortal, onBackToHome }) {
   // Verificación facial
