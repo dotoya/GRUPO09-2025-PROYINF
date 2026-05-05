@@ -53,44 +53,6 @@ export default function Simulacion({ userData, onBack, onRequestSolicitud }) {
     <div className="sim-page">
       <div className="sim-container">
 
-        {/* Formulario */}
-        <div className="sim-card">
-          <button className="back-button" onClick={onBack}>← Volver al inicio</button>
-          <h2>Simulador de crédito</h2>
-          <p className="sim-subtitle">
-            Hola <strong>{userData?.email}</strong>, ingresa los datos para simular tu crédito.
-          </p>
-
-          {error && <div className="form-error">{error}</div>}
-
-          <form onSubmit={handleSubmit} className="auth-form">
-            <div className="form-group">
-              <label className="form-label">RUT</label>
-              <input name="rut" placeholder="12345678-9" value={formData.rut} onChange={handleChange} required />
-            </div>
-            <div className="form-group">
-              <label className="form-label">Edad</label>
-              <input name="edad" type="number" placeholder="25" value={formData.edad} onChange={handleChange} required />
-            </div>
-            <div className="form-group">
-              <label className="form-label">Monto necesario <span className="form-hint">(en pesos)</span></label>
-              <input name="monto" type="number" placeholder="1.000.000" value={formData.monto} onChange={handleChange} required />
-            </div>
-            <div className="form-group">
-              <label className="form-label">Renta mensual <span className="form-hint">(en pesos)</span></label>
-              <input name="renta" type="number" placeholder="500.000" value={formData.renta} onChange={handleChange} required />
-            </div>
-            <div className="form-group">
-              <label className="form-label">Cantidad de cuotas</label>
-              <input name="cuotas" type="number" placeholder="12" value={formData.cuotas} onChange={handleChange} required />
-            </div>
-
-            <button type="submit" className="primary-button full-width" disabled={isLoading}>
-              {isLoading ? 'Calculando...' : 'Calcular simulación'}
-            </button>
-          </form>
-        </div>
-
         {/* Card del medidor - siempre visible, FUERA del form */}
         <div className="sim-card meter-card">
           <h3 className="meter-title">Probabilidad de aprobación</h3>
@@ -156,6 +118,46 @@ export default function Simulacion({ userData, onBack, onRequestSolicitud }) {
             </div>
           )}
         </div>
+
+        {/* Formulario */}
+        <div className="sim-card">
+          <button className="back-button" onClick={onBack}>← Volver al inicio</button>
+          <h2>Simulador de crédito</h2>
+          <p className="sim-subtitle">
+            Hola <strong>{userData?.email}</strong>, ingresa los datos para simular tu crédito.
+          </p>
+
+          {error && <div className="form-error">{error}</div>}
+
+          <form onSubmit={handleSubmit} className="auth-form">
+            <div className="form-group">
+              <label className="form-label">RUT</label>
+              <input name="rut" placeholder="12345678-9" value={formData.rut} onChange={handleChange} required />
+            </div>
+            <div className="form-group">
+              <label className="form-label">Edad</label>
+              <input name="edad" type="number" placeholder="25" value={formData.edad} onChange={handleChange} required />
+            </div>
+            <div className="form-group">
+              <label className="form-label">Monto necesario <span className="form-hint">(en pesos)</span></label>
+              <input name="monto" type="number" placeholder="1.000.000" value={formData.monto} onChange={handleChange} required />
+            </div>
+            <div className="form-group">
+              <label className="form-label">Renta mensual <span className="form-hint">(en pesos)</span></label>
+              <input name="renta" type="number" placeholder="500.000" value={formData.renta} onChange={handleChange} required />
+            </div>
+            <div className="form-group">
+              <label className="form-label">Cantidad de cuotas</label>
+              <input name="cuotas" type="number" placeholder="12" value={formData.cuotas} onChange={handleChange} required />
+            </div>
+
+            <button type="submit" className="primary-button full-width" disabled={isLoading}>
+              {isLoading ? 'Calculando...' : 'Calcular simulación'}
+            </button>
+          </form>
+        </div>
+
+        
 
         {/* Resultados */}
         {results && (
