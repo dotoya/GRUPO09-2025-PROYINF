@@ -1,5 +1,5 @@
 // Archivo: client/src/components/ClientPortal.jsx
-
+import '../App.css';
 import React from 'react';
 
 // Esta es la nueva "ventana" a la que serás redirigido.

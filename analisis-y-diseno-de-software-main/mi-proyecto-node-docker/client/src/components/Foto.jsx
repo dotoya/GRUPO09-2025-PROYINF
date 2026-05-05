@@ -1,7 +1,7 @@
 // Archivo: client/src/components/Foto.jsx
 
 import React, { useState, useRef, useEffect } from 'react';
-import './Login.css'; // reutilizamos estilos base
+import '../App.css';
 
 export default function Foto({ userData, solicitudData, fotoCarnet, onBack, onSuccess }) {
   const [photoDataURL, setPhotoDataURL] = useState(null);

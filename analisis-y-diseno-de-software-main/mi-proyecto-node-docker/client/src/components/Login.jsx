@@ -1,12 +1,15 @@
 import React, { useState } from 'react';
-import './Login.css';
-
+ 
 export default function Login({ onSuccess, onCreateAccount }) {
   const [loginEmail, setLoginEmail] = useState('');
   const [loginPassword, setLoginPassword] = useState('');
-
+  const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState('');
+ 
   const handleLogin = async (e) => {
     e.preventDefault();
+    setError('');
+    setIsLoading(true);
     try {
       const response = await fetch('http://localhost:3001/api/auth/login', {
         method: 'POST',
@@ -15,42 +18,63 @@ export default function Login({ onSuccess, onCreateAccount }) {
       });
       const data = await response.json();
       if (!response.ok) throw new Error(data.message || 'Error en login');
-      // Guardar token y pasar datos de usuario al padre
       localStorage.setItem('token', data.token);
-      const userData = {
-        email: loginEmail,
-        token: data.token,
-        ...data.user // asumiendo que el backend envía datos del usuario
-      };
+      const userData = { email: loginEmail, token: data.token, ...data.user };
       if (onSuccess) onSuccess(userData);
     } catch (error) {
-      alert(`Error en el login: ${error.message}`);
+      setError(error.message);
+    } finally {
+      setIsLoading(false);
     }
   };
-
+ 
   return (
-    <div className="auth-card">
-      <h2>Iniciar Sesión</h2>
-      <form onSubmit={handleLogin} className="auth-form">
-        <input
-          type="email"
-          placeholder="Email"
-          value={loginEmail}
-          onChange={(e) => setLoginEmail(e.target.value)}
-          required
-        />
-        <input
-          type="password"
-          placeholder="Contraseña"
-          value={loginPassword}
-          onChange={(e) => setLoginPassword(e.target.value)}
-          required
-        />
-        <button type="submit" className="primary-button">Entrar</button>
-      </form>
-      <p style={{ marginTop: '0.75rem' }}>
-        ¿No tienes cuenta? <button className="link-button" onClick={onCreateAccount}>crear cuenta</button>
-      </p>
+    <div className="auth-page">
+      <div className="auth-page-brand" onClick={() => window.location.reload()}>
+        🏦 Banco La Polar
+      </div>
+ 
+      <div className="auth-card">
+        <div className="auth-card-header">
+          <h2>Bienvenido de vuelta</h2>
+          <p className="auth-subtitle">Ingresa tus credenciales para continuar</p>
+        </div>
+ 
+        {error && <div className="form-error">⚠️ {error}</div>}
+ 
+        <form onSubmit={handleLogin} className="auth-form">
+          <div className="form-group">
+            <label className="form-label">Correo electrónico</label>
+            <input
+              type="email"
+              placeholder="tucorreo@email.com"
+              value={loginEmail}
+              onChange={(e) => setLoginEmail(e.target.value)}
+              required
+            />
+          </div>
+          <div className="form-group">
+            <label className="form-label">Contraseña</label>
+            <input
+              type="password"
+              placeholder="••••••••"
+              value={loginPassword}
+              onChange={(e) => setLoginPassword(e.target.value)}
+              required
+            />
+          </div>
+          <button type="submit" className="primary-button full-width" disabled={isLoading}>
+            {isLoading ? 'Ingresando...' : 'Iniciar sesión'}
+          </button>
+        </form>
+ 
+        <p className="auth-footer-text">
+          ¿No tienes cuenta?{' '}
+          <button className="link-button-inline" onClick={onCreateAccount}>
+            Crear cuenta gratis
+          </button>
+        </p>
+      </div>
     </div>
   );
 }
