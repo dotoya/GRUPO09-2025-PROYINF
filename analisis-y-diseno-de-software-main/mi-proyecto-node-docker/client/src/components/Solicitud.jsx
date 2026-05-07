@@ -52,7 +52,7 @@ export default function Solicitud({ userData, simulacionData, onBack, onConfirma
         // Solo sobrescribe si el campo estaba vacío, o puedes forzar la sobrescritura siempre
         nombre: result.data.nombre || prevForm.nombre,
         apellido: result.data.apellidos || prevForm.apellido, 
-        rut: result.data.rut || prevForm.rut,
+        rut: (result.data.rut || prevForm.rut).replace(/\./g, ''),
         nacimiento: result.data.fechaNacimiento || prevForm.nacimiento
       }));
 
