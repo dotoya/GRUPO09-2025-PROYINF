@@ -8,6 +8,7 @@ import Simulacion from './components/Simulacion';
 import Solicitud from './components/Solicitud';
 import Foto from './components/Foto';
 import DetallesSimulacion from './components/DetallesSimulacion';
+import CreditApplicationPage from './features/credit-application/CreditApplicationPage';
 
 // Separamos el contenido en este componente para poder usar el hook useNavigate
 function AppContent() {
@@ -174,6 +175,8 @@ function AppContent() {
             ) : <Navigate to="/login" replace />
           } />
           
+          <Route path="/credit-application" element={<CreditApplicationPage />}></Route>
+
           {/* Ruta por defecto (Catch-all) en caso de que escriban una URL que no existe */}
           <Route path="*" element={<Navigate to="/" replace />} />
         </Routes>
