@@ -169,3 +169,25 @@
   opacity: 0.6;
   cursor: not-allowed;
 }
+
+.file-upload-magic-hint {
+  display: inline-block;
+  background: #e0f2fe;
+  color: #0369a1;
+  font-size: 0.75rem;
+  font-weight: 500;
+  padding: 3px 10px;
+  border-radius: 20px;
+  margin-bottom: 8px;
+}
+
+@keyframes autofillFlash {
+  0%   { background: #dcfce7; box-shadow: 0 0 0 2px #16a34a; }
+  70%  { background: #dcfce7; box-shadow: 0 0 0 2px #16a34a; }
+  100% { background: transparent; box-shadow: none; }
+}
+
+.field-autofilled input {
+  animation: autofillFlash 1.4s ease forwards;
+  border-radius: 6px;
+}

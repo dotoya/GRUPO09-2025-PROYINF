@@ -130,10 +130,10 @@ export default function Simulacion({ userData, onBack, onRequestSolicitud }) {
           {error && <div className="form-error">{error}</div>}
 
           <form onSubmit={handleSubmit} className="auth-form">
-            <div className="form-group">
+            {/* <div className="form-group">
               <label className="form-label">RUT</label>
               <input name="rut" placeholder="12345678-9" value={formData.rut} onChange={handleChange} required />
-            </div>
+            </div> */}
             <div className="form-group">
               <label className="form-label">Edad</label>
               <input name="edad" type="number" placeholder="25" value={formData.edad} onChange={handleChange} required />
