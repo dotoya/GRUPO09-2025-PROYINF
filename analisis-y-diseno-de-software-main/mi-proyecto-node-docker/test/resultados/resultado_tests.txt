@@ -1,0 +1,57 @@
+test_01_simulacion_datos_validos_retorna_probabilidad (test_probabilidad_acep.TestSimulacionEndpoint.test_01_simulacion_datos_validos_retorna_probabilidad)
+DADO que el usuario quiere simular un crédito, ... FAIL
+test_02_simulacion_datos_invalidos_retorna_error (test_probabilidad_acep.TestSimulacionEndpoint.test_02_simulacion_datos_invalidos_retorna_error)
+DADO que el usuario ingresa datos en el simulador, ... FAIL
+test_03_verify_documento_pdf_valido (test_verify.TestVerifyEndpoint.test_03_verify_documento_pdf_valido)
+DADO que el cliente sube sus documentos, ... FAIL
+test_04_verify_documento_invalido_solicita_ingreso_manual (test_verify.TestVerifyEndpoint.test_04_verify_documento_invalido_solicita_ingreso_manual)
+DADO que ocurre un error en la captura, ... FAIL
+
+======================================================================
+FAIL: test_01_simulacion_datos_validos_retorna_probabilidad (test_probabilidad_acep.TestSimulacionEndpoint.test_01_simulacion_datos_validos_retorna_probabilidad)
+DADO que el usuario quiere simular un crédito,
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/dotoya/proyecto_software/GRUPO03-2026-PROYINF/analisis-y-diseno-de-software-main/mi-proyecto-node-docker/test/test_probabilidad_acep.py", line 78, in test_01_simulacion_datos_validos_retorna_probabilidad
+    self.assertIn(
+AssertionError: 'probabilidad' not found in {'message': 'Simulación procesada', 'result': {'valorCuota': None, 'costoTotal': None, 'tasaMensual': '1.50', 'cae': '19.56', 'montoSolicitado': 5000000, 'cuotas': None}} : La respuesta debe contener el campo 'probabilidad'
+
+======================================================================
+FAIL: test_02_simulacion_datos_invalidos_retorna_error (test_probabilidad_acep.TestSimulacionEndpoint.test_02_simulacion_datos_invalidos_retorna_error)
+DADO que el usuario ingresa datos en el simulador,
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/dotoya/proyecto_software/GRUPO03-2026-PROYINF/analisis-y-diseno-de-software-main/mi-proyecto-node-docker/test/test_probabilidad_acep.py", line 105, in test_02_simulacion_datos_invalidos_retorna_error
+    self.assertIn(
+AssertionError: 200 not found in [400, 422] : Se esperaba HTTP 400/422, se obtuvo 200
+
+======================================================================
+FAIL: test_03_verify_documento_pdf_valido (test_verify.TestVerifyEndpoint.test_03_verify_documento_pdf_valido)
+DADO que el cliente sube sus documentos,
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/dotoya/proyecto_software/GRUPO03-2026-PROYINF/analisis-y-diseno-de-software-main/mi-proyecto-node-docker/test/test_verify.py", line 67, in test_03_verify_documento_pdf_valido
+    self.assertIn(
+AssertionError: 404 not found in [200, 201] : Se esperaba HTTP 200/201 al procesar PDF válido, se obtuvo 404
+
+======================================================================
+FAIL: test_04_verify_documento_invalido_solicita_ingreso_manual (test_verify.TestVerifyEndpoint.test_04_verify_documento_invalido_solicita_ingreso_manual)
+DADO que ocurre un error en la captura,
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/dotoya/proyecto_software/GRUPO03-2026-PROYINF/analisis-y-diseno-de-software-main/mi-proyecto-node-docker/test/test_verify.py", line 106, in test_04_verify_documento_invalido_solicita_ingreso_manual
+    self.assertIn(
+AssertionError: 404 not found in [400, 415, 422, 500] : Se esperaba código de error al procesar archivo inválido, se obtuvo 404
+
+----------------------------------------------------------------------
+Ran 4 tests in 0.048s
+
+FAILED (failures=4)
+
+[setUpClass] Datos de prueba para /api/simulacion preparados.
+
+[tearDownClass] Pruebas de simulación finalizadas.
+
+[setUpClass] Datos de prueba para /api/verify preparados.
+
+[tearDownClass] Pruebas de verificación finalizadas.
