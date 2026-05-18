@@ -17,7 +17,7 @@ Para manejar datos sensibles y credenciales (como la comprobación de identidad 
 
 1. Renombra el archivo `.env.example` a `.env` en la raíz del proyecto.
 2. Abre el nuevo `.env` y configura la cuenta de administrador a tu gusto.
-3. Ingresa las llaves de la API de Azure. *(Nota: Si estás testeando el proyecto, puedes usar las credenciales de prueba que dejamos en el archivo `Codigo_copia.pdf`).*
+3. Ingresa las llaves de la API de Azure. *(Nota: Si estás testeando el proyecto, puedes usar las credenciales de prueba que dejamos en el archivo `Codigo_copia(nuevo).pdf`).*
 
 Una vez configurado, estás listo para levantar el proyecto.
 
@@ -36,7 +36,7 @@ Para iniciar los servicios (Frontend con *hot-reload*, Backend y Base de Datos),
 
    Ejecuta el siguiente comando y déjalo corriendo:
    ```bash
-   sudo docker-compose up --build
+   sudo docker compose up --build
    ```
 
 ### Accesos Rápidos
