@@ -27,6 +27,7 @@ class TestSimulacionEndpoint(unittest.TestCase):
 
         # Datos válidos: usuario con buen perfil financiero
         cls.payload_valido = {
+            "edad": 30,
             "monto": 5000000,
             "plazo": 24,
             "ingreso_mensual": 800000,
