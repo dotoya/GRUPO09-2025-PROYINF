@@ -11,8 +11,11 @@ COPY package*.json ./
 # 4. Instalamos las dependencias
 RUN npm install
 
-# 5. Copiamos el resto de los archivos del proyecto
-COPY . .
+# 5. Copiamos SOLO los archivos necesarios para el cliente
+COPY index.html ./
+COPY vite.config.js ./
+COPY src/ ./src/
+COPY public/ ./public/
 
 # 6. Exponemos el puerto de Vite
 EXPOSE 5173
