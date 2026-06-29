@@ -4,7 +4,7 @@ const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const User = require('./auth.model');
 
-const JWT_SECRET = 'un_secreto_muy_secreto_que_debes_cambiar';
+const JWT_SECRET = process.env.JWT_SECRET;
 
 // Controlador para la ruta de Registro
 exports.register = async (req, res) => {

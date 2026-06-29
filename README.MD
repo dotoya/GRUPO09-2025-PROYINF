@@ -13,11 +13,14 @@ Puede acceder a la Wiki mediante el siguiente [enlace](https://github.com/dotoya
 * [Test Hito3](https://youtu.be/VIYJMNx5HbE)
 * [Test Hito5](https://youtu.be/Rxpma8kiMzI)
 ## ⚠️ Variables de Entorno (Antes de usar Docker)
-Para manejar datos sensibles y credenciales (como la comprobación de identidad de Azure), el proyecto utiliza un archivo `.env`.
+Para manejar datos sensibles de seguridad y credenciales (como la comprobación de identidad de Azure y el JWL), el proyecto utiliza un archivo `.env`.
 
 1. Renombra el archivo `.env.example` a `.env` en la raíz del proyecto.
 2. Abre el nuevo `.env` y configura la cuenta de administrador a tu gusto.
-3. Ingresa las llaves de la API de Azure. *(Nota: Si estás testeando el proyecto, puedes usar las credenciales de prueba que dejamos en el archivo `Codigo_copia(nuevo).pdf`).*
+3. Ingresa las llaves de la API de Azure.
+4. Ingresa la clave de seguridad para las sesiones en la variable `JWT_SECRET`.
+
+*(Nota: Si estás testeando el proyecto, puedes usar las credenciales de prueba para Azure y la clave JWT_SECRET que dejamos en el archivo `Codigo_copia(nuevo).pdf`).*
 
 Una vez configurado, estás listo para levantar el proyecto.
 
